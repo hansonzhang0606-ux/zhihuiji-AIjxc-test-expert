@@ -193,4 +193,5 @@ time-tracking-skill/
 - v1.5.2：**身份识别从「读 `team_roster.yaml`」改为「实时查 MySQL `agent_team_roster`」**——`team_roster.yaml` 退化为「输入源」（管理员维护后通过 `sync_roster_to_mysql.py` 推到 MySQL），新增 `scripts/load_roster.py` 给 AI 用 JSON 形式拉取在职人员；会话启动顺序调整为「先 MySQL 配置检查 → 再花名册查询 → 再身份验证」
 - 业务线编号选择：多业务线成员身份确认时，AI 列出编号选项让成员输入数字选择（`biz_line_helper.py` 新增 `code_to_biz_line` 反向映射），避免自由文本回答笼统导致匹配不准确
 - v5.3：`sync_task.bat` 修复 Windows 兼容性（GBK 编码 + CRLF 换行 + Python 自动探测 + `%~dp0` 定位）；定时任务注册由「人工手动」升级为「AI 自动完成」（会话启动检测未注册 → 自动注册早/午/晚三任务）
+- v5.4：强化「立即触发 + 阻塞下一步」——修复实际测试中步骤完成后 AI 跳过时间收集、直接展示「下一步」选项的问题；5 个环节产出交付后必须先完成时间收集（通报 → 询问 → 解析 → 二次确认 → 写本地 JSONL），确认记录完成后才允许展示下一步选项
 - 抽取日期：2026-08-18

@@ -197,6 +197,8 @@ node stage4/stage4_execute.js --self-test
 - 强制询问 → 解析 → **二次确认** → 写本地 JSONL（用户故事用会话缓存值）
 - 拒绝反馈 → 最多追问 2 次，记录 0 标注「用户未反馈」，**不阻塞**后续询问
 
+> ⛔ **立即触发+阻塞（v5.4）**：「可以了」后**必须先完成上述时间收集**（含二次确认+写本地 JSONL），**禁止先展示「补充知识库 / Stage5」等下一步选项**；用户拒绝记录 0 后，才允许询问下一步。
+
 ```bash
 python src/scripts/time-tracking/scripts/record_time_saved.py \
   --employee "{姓名}" --user-story "{PRJ-xxx 需求名}" \

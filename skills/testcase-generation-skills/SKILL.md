@@ -310,3 +310,5 @@ testcase-generation-skills/
 | 7.0.0 | 精简编排：CURRENT 唯一规格；去 confluence-download；templates 扁平化；≤400 行 |
 | 7.1.0 | Stage5：P0 Excel → DevOps 导入；`docs/` 仅留档、禁止运行时引用 |
 | 7.2.0 | 嵌入时间追踪：会话启动 MySQL 检查+身份识别+用户故事收集；5 环节（01/02/04/06/07）强制反馈节省时间，本地 JSONL → 定时任务同步 MySQL |
+
+> 注：v7.2.0 内嵌 time-tracking 已于 2026-08-20 更新至 **v5.4**（「立即触发+阻塞下一步」强化——产出交付后必须先完成时间收集、确认记录完成后才允许展示下一步选项），5 个 checkpoint/stage 与 agent.md 第 6 条已同步该强化。

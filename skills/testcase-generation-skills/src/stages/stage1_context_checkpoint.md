@@ -96,6 +96,8 @@ node stage1/stage1_context.js --project-dir <工作区> --approve
 - 首次追踪若会话尚未缓存用户故事，在本轮询问中一并收集「PRJ 编号+名称」
 - 用户拒绝反馈 → 最多追问 2 次，仍拒绝则记录 0 并标注「用户未反馈」，**不阻塞**进入 1A
 
+> ⛔ **立即触发+阻塞（v5.4）**：approve 成功后**必须先完成上述时间收集**（含二次确认+写本地 JSONL），**禁止先展示「进入 1A」选项**；用户拒绝记录 0 后，才允许进入 1A。
+
 ```bash
 python src/scripts/time-tracking/scripts/record_time_saved.py \
   --employee "{姓名}" --user-story "{PRJ-xxx 需求名}" \

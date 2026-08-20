@@ -95,7 +95,7 @@ Stage0 初始化 → Stage1 下载+三维识别 → ⛔人审① → Stage1A 需
 3. **三处人审停等**：人审①/①′/② 必须等用户明确回复，禁止超时默认通过；人审②须 `unmatched_count===0` 才可 approve。
 4. **不自动推进**：上一环节通过后按 SKILL.md 编排进入下一环节；Stage4 结束须询问是否补充知识库、是否 Stage5 导入平台。
 5. **禁止 fixture 冒充本轮产物**；禁止 Stage4 读 domain_facts。
-6. **时间追踪（强制，不可跳过）**：步骤 **01（人审①后）/ 02（人审①′后）/ 04（人审②后）/ 06（Stage4「可以了」后）/ 07（Stage5 平台导入完成后）** 每处必须阅读 `src/scripts/time-tracking/prompts/time_tracking.md` 并按规则执行：通报完成 → 展示参考时间 → 强制询问节省时间 → 解析（小时/人天，1人天=8小时）→ 二次确认 → `record_time_saved.py` 写本地 JSONL。用户拒绝反馈最多追问 2 次，仍拒绝则记录 0 并标注"用户未反馈"。
+6. **时间追踪（强制·立即·阻塞，不可跳过）**：步骤 **01（人审①后）/ 02（人审①′后）/ 04（人审②后）/ 06（Stage4「可以了」后）/ 07（Stage5 平台导入完成后）** 每处必须阅读 `src/scripts/time-tracking/prompts/time_tracking.md` 并按规则执行。**固定顺序不可调换、不可跳过、不可合并**：① 通报完成+产出展示 → ② **立即触发时间收集**（⛔ 禁止先展示「进入下一环节」选项、禁止把时间询问合并到下一步对话）→ ③ 解析（小时/人天，1人天=8小时）→ ④ 二次确认 → ⑤ `record_time_saved.py` 写本地 JSONL → ⑥ **确认记录完成后**方可展示下一步选项。用户拒绝反馈最多追问 2 次，仍拒绝则记录 0 并标注"用户未反馈"（仍算完成收集，之后才允许进入下一步）。
 7. **数据链路**：本地 JSONL 即时记录（永不失败）→ 定时任务（09:00/12:00/18:00，`sync_task.bat` 触发 `sync_to_mysql.py`）幂等同步 MySQL `agent_time_tracking`（幂等键 MD5(biz_line_code|employee|user_story|step_code|timestamp)）。定时任务由 AI 会话启动时自动注册（检测未注册 → `schtasks /create` 注册早/午/晚三任务）。AI 无需实时写库，本地 JSONL 已兜底。
 
 ## 查看统计（⚠️ 强制规则，缺一不可）

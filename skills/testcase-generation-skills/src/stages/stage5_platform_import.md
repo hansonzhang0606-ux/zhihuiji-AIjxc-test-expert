@@ -159,6 +159,7 @@ npm run stage5:self-test
 3. 跑 export → 给出 Excel 路径与 §5 步骤。  
 4. 不代替用户在浏览器导入（除非后续 upload 脚本落地）。  
 5. ⏱ **时间追踪（07 知识入库，平台导入完成后强制）**：交付 Excel 与导入步骤后询问「DevOps 导入是否完成？」；用户确认完成（或表示不再导入、仅要 Excel）后，按 [`time_tracking.md`](../scripts/time-tracking/prompts/time_tracking.md) §四 收集。step_code=`07`，参考值 1~2 小时；强制询问 → 解析 → **二次确认** → 写本地 JSONL；拒绝反馈最多追问 2 次，记录 0 标注「用户未反馈」。
+   > ⛔ **立即触发（v5.4）**：用户确认导入完成后**必须立即**触发本次时间收集，**禁止跳过或合并到后续对话**；完成收集（含二次确认+写本地）后本环节才算收尾。
 
 ```bash
 python src/scripts/time-tracking/scripts/record_time_saved.py \
