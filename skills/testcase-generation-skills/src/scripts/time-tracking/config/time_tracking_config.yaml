@@ -43,7 +43,7 @@ local_storage:
 # 生成的文件：~/.workbuddy/data/time-tracking/{biz_line}/mysql_config.json
 #   ⚠️ 该文件含数据库密码，是本机私有配置，不随 Skill 分发，不要提交 Git/发群。
 #
-# 同步方式：Windows 定时任务（每日 12:00 / 18:00 运行 scripts/sync_task.bat），
+# 同步方式：Windows 定时任务（每日 09:00/12:00/18:00 运行 scripts/sync_task.bat），
 #   或手动运行 python scripts/sync_to_mysql.py --biz-line <业务线>（幂等，可重复执行）。
 #   表结构：agent_time_tracking（唯一键 record_key，重复同步不产生重复数据）。
 mysql:
