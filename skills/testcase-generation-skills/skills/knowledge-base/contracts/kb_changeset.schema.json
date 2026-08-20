@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/kb_changeset.schema.json",
+  "title": "KbChangeSet",
+  "description": "Demand 6.3 唯一机器写入计划",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "overview_id", "source_fingerprint", "base_commit", "changeset_hash", "changes"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "6.3" },
+    "overview_id": { "type": "string", "minLength": 1 },
+    "source_fingerprint": { "type": "string", "minLength": 8 },
+    "base_commit": {
+      "type": "string",
+      "description": "对账时 kb_root HEAD；无 git 时可用 local:<hash>"
+    },
+    "changeset_hash": { "type": "string", "minLength": 8 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "changes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/change" }
+    },
+    "skipped": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["reason", "summary"],
+        "properties": {
+          "reason": { "type": "string" },
+          "summary": { "type": "string" },
+          "source_ref": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "change_id",
+        "operation",
+        "module_l1",
+        "module_l2",
+        "target_ref",
+        "summary"
+      ],
+      "properties": {
+        "change_id": { "type": "string", "pattern": "^CH-\\d{3,}$" },
+        "kind": {
+          "type": "string",
+          "enum": ["page", "page_relation", "page_url", "page_element", "backend_api", "supplement"]
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["add", "update", "deprecate", "relation_change", "skip"]
+        },
+        "module_l1": { "type": "string" },
+        "module_l2": { "type": "string" },
+        "page_id": { "type": "string" },
+        "page_role": { "type": "string", "enum": ["主页面", "核心子页面", "子页面"] },
+        "platform": { "type": "string", "enum": ["web", "app"] },
+        "element_name": { "type": "string" },
+        "relation": { "type": "object" },
+        "target_ref": {
+          "type": "string",
+          "description": "相对 kb_root 路径，如 销售/销售/子页面_销售单开单页.md"
+        },
+        "summary": { "type": "string", "maxLength": 80 },
+        "before": {},
+        "after": {},
+        "conflict_kind": {
+          "type": ["string", "null"],
+          "enum": ["none", "semantic_conflict", "strengthen", null]
+        },
+        "source_ref": { "type": "string" },
+        "api_rich": { "type": "boolean" },
+        "selected": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}

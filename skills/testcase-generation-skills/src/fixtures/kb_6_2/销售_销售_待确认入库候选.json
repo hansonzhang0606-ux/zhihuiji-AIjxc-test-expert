@@ -1,0 +1,21 @@
+{
+  "module_l1": "销售",
+  "module_l2": "销售",
+  "page_id": "销售单开单页",
+  "page_role": "核心子页面",
+  "platform": "web",
+  "status": "待确认",
+  "elements": [
+    {
+      "name": "测试候选.表头提示",
+      "position": "商品列表表头右侧",
+      "input_options": "仅测试候选",
+      "interaction": "查看提示",
+      "result": "显示说明",
+      "downstream": "—"
+    }
+  ],
+  "supplements": [
+    "测试候选：仅用于验证入库 dry-run，不应对样例知识库执行 --apply。"
+  ]
+}

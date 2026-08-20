@@ -1,0 +1,59 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "products": {
+    "in_scope": ["ailit"],
+    "out_of_scope": ["智慧记AI进销存", "智慧记", "智慧记零售"],
+    "confidence": "high",
+    "source": "title"
+  },
+  "versions": {
+    "in_scope": ["开单版", "单店版", "多店版"],
+    "out_of_scope": [],
+    "confidence": "low",
+    "source": "default"
+  },
+  "platforms": {
+    "in_scope": ["PC端", "APP端"],
+    "out_of_scope": ["小程序端", "H5端"],
+    "confidence": "high",
+    "source": "title"
+  },
+  "regression_hints": [
+    {
+      "type": "product_regression",
+      "target": "智慧记AI进销存",
+      "priority": "P3",
+      "suggestion": "建议增加1条低优先级回归用例，验证产品「智慧记AI进销存」不受本次需求影响",
+      "auto_skip_tp": false
+    },
+    {
+      "type": "product_regression",
+      "target": "智慧记",
+      "priority": "P3",
+      "suggestion": "（默认 skip）产品「智慧记」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+      "auto_skip_tp": true
+    },
+    {
+      "type": "product_regression",
+      "target": "智慧记零售",
+      "priority": "P3",
+      "suggestion": "（默认 skip）产品「智慧记零售」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+      "auto_skip_tp": true
+    },
+    {
+      "type": "platform_regression",
+      "target": "小程序端",
+      "priority": "P3",
+      "suggestion": "（默认 skip）端「小程序端」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+      "auto_skip_tp": true
+    },
+    {
+      "type": "platform_regression",
+      "target": "H5端",
+      "priority": "P3",
+      "suggestion": "（默认 skip）端「H5端」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+      "auto_skip_tp": true
+    }
+  ],
+  "recognized_at": "2026-07-21T11:02:20.223Z"
+}

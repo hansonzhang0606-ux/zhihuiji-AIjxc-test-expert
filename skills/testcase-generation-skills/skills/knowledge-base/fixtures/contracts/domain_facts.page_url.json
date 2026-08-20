@@ -1,0 +1,20 @@
+{
+  "schema_version": "6.1",
+  "requirement_title": "客户来源调研弹窗",
+  "facts": [
+    {
+      "id": "DF-010",
+      "statement": "销售单列表页 Web 前端 URL 为 /sales/order/list",
+      "source": "kb_applied",
+      "session_only": false,
+      "platforms": ["web"],
+      "fact_kind": "page_url",
+      "page_id": "销售单列表页",
+      "page_url": {
+        "template": "/sales/order/list",
+        "absolute": false
+      },
+      "kb_ref": "销售/销售/页面关系.md#销售单列表页"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "6.3",
+  "overview_id": "ov-20260806-001",
+  "source_fingerprint": "sha256:deadbeef01",
+  "base_commit": "local:abc12345",
+  "changeset_hash": "sha256:cset0001",
+  "created_at": "2026-08-06T02:00:00.000Z",
+  "changes": [
+    {
+      "change_id": "CH-001",
+      "operation": "add",
+      "module_l1": "销售",
+      "module_l2": "销售",
+      "page_id": "销售单列表页",
+      "platform": "web",
+      "target_ref": "销售/销售/页面关系.md",
+      "summary": "补充 Web 列表 URL",
+      "before": null,
+      "after": { "template": "/sales/order/list" },
+      "conflict_kind": "none",
+      "source_ref": "C-001",
+      "selected": true
+    },
+    {
+      "change_id": "CH-002",
+      "operation": "update",
+      "module_l1": "销售",
+      "module_l2": "销售",
+      "page_id": "销售单列表页",
+      "platform": "web",
+      "element_name": "表头.设置",
+      "target_ref": "销售/销售/主页面_销售单列表页.md",
+      "summary": "补充表头设置接口",
+      "conflict_kind": null,
+      "source_ref": "C-002",
+      "selected": true
+    }
+  ],
+  "skipped": [
+    { "reason": "single_case_data", "summary": "跳过单条数据准备步骤" }
+  ]
+}

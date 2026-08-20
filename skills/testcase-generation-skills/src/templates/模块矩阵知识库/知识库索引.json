@@ -1,0 +1,136 @@
+{
+  "schema_version": "6.2",
+  "generated_at": "2026-08-06T02:37:55.268Z",
+  "generated_by": "rebuild_index.js",
+  "modules": [
+    {
+      "module_l1": "销售",
+      "module_l2": "销售",
+      "path": "销售/销售",
+      "pages_file": "销售/销售/页面关系.md",
+      "pages": [
+        {
+          "page_id": "销售单列表页",
+          "role": "主页面",
+          "file": "销售/销售/主页面_销售单列表页.md",
+          "platforms": [
+            "web",
+            "app"
+          ],
+          "status": "已确认",
+          "keywords": [
+            "销售单列表页",
+            "表头.设置",
+            "App 无"
+          ]
+        },
+        {
+          "page_id": "销售单开单页",
+          "role": "核心子页面",
+          "file": "销售/销售/子页面_销售单开单页.md",
+          "platforms": [
+            "web",
+            "app"
+          ],
+          "status": "已确认",
+          "keywords": [
+            "销售单开单页",
+            "商品列表.表头.设置",
+            "公用字段、单独显示"
+          ]
+        },
+        {
+          "page_id": "销售单详情页",
+          "role": "核心子页面",
+          "file": "销售/销售/子页面_销售单详情页.md",
+          "platforms": [
+            "web",
+            "app"
+          ],
+          "status": "已确认",
+          "keywords": [
+            "销售单详情页",
+            "自定义表头内容"
+          ]
+        },
+        {
+          "page_id": "销售单开单成功页",
+          "role": "子页面",
+          "file": null,
+          "platforms": [
+            "app"
+          ],
+          "status": "仅关系",
+          "keywords": [
+            "销售单开单成功页"
+          ]
+        }
+      ]
+    },
+    {
+      "module_l1": "销售",
+      "module_l2": "销售预订",
+      "path": "销售/销售预订",
+      "pages_file": "销售/销售预订/页面关系.md",
+      "pages": [
+        {
+          "page_id": "销售预定单列表页",
+          "role": "主页面",
+          "file": "销售/销售预订/主页面_销售预定单列表页.md",
+          "platforms": [
+            "web",
+            "app"
+          ],
+          "status": "已确认",
+          "keywords": [
+            "销售预定单列表页",
+            "表头.设置",
+            "App 无"
+          ]
+        },
+        {
+          "page_id": "销售预定单开单页",
+          "role": "核心子页面",
+          "file": "销售/销售预订/子页面_销售预定单开单页.md",
+          "platforms": [
+            "web",
+            "app"
+          ],
+          "status": "待确认",
+          "keywords": [
+            "销售预定单开单页",
+            "商品列表.表头.设置",
+            "公用字段、单独显示",
+            "待确认"
+          ]
+        },
+        {
+          "page_id": "销售预定单详情页",
+          "role": "核心子页面",
+          "file": "销售/销售预订/子页面_销售预定单详情页.md",
+          "platforms": [
+            "web",
+            "app"
+          ],
+          "status": "待确认",
+          "keywords": [
+            "销售预定单详情页",
+            "自定义表头内容"
+          ]
+        },
+        {
+          "page_id": "销售预定单开单成功页",
+          "role": "子页面",
+          "file": null,
+          "platforms": [
+            "app"
+          ],
+          "status": "仅关系",
+          "keywords": [
+            "销售预定单开单成功页"
+          ]
+        }
+      ]
+    }
+  ]
+}

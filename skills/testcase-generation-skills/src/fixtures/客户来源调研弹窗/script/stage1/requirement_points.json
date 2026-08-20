@@ -1,0 +1,85 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "requirement_essence": "新用户首单保存成功后弹出客户来源调研弹窗并上报曝光",
+  "domain_objects": ["销售单", "客户", "调研弹窗"],
+  "state_machine": ["草稿", "已保存", "弹窗展示", "弹窗关闭"],
+  "boundaries": ["仅无历史销售单的账号触发", "ailit", "PC/APP"],
+  "test_context": {
+    "requirement_title": "客户来源调研弹窗",
+    "products": {
+      "in_scope": ["ailit"],
+      "out_of_scope": ["智慧记AI进销存", "智慧记", "智慧记零售"],
+      "confidence": "high",
+      "source": "title"
+    },
+    "versions": {
+      "in_scope": ["开单版", "单店版", "多店版"],
+      "out_of_scope": [],
+      "confidence": "low",
+      "source": "default"
+    },
+    "platforms": {
+      "in_scope": ["PC端", "APP端"],
+      "out_of_scope": ["小程序端"],
+      "confidence": "high",
+      "source": "title"
+    },
+    "regression_hints": [
+      {
+        "type": "product_regression",
+        "target": "智慧记AI进销存",
+        "priority": "P3",
+        "suggestion": "建议增加1条低优先级回归用例，验证智慧记AI进销存不受本次需求影响",
+        "auto_skip_tp": false
+      },
+      {
+        "type": "product_regression",
+        "target": "智慧记",
+        "priority": "P3",
+        "suggestion": "（默认 skip）产品「智慧记」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+        "auto_skip_tp": true
+      },
+      {
+        "type": "product_regression",
+        "target": "智慧记零售",
+        "priority": "P3",
+        "suggestion": "（默认 skip）产品「智慧记零售」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+        "auto_skip_tp": true
+      },
+      {
+        "type": "platform_regression",
+        "target": "小程序端",
+        "priority": "P3",
+        "suggestion": "（默认 skip）端「小程序端」不在本次范围，人审①可显式取消 skip 后再生成回归 TP",
+        "auto_skip_tp": true
+      }
+    ]
+  },
+  "confirmed_points": [
+    {
+      "id": "RP-001",
+      "title": "新用户首单保存成功后弹出客户来源调研弹窗",
+      "priority_hint": "P0",
+      "detail": "无历史销售单账号，保存成功后弹出调研弹窗，原Toast不显示"
+    },
+    {
+      "id": "RP-002",
+      "title": "弹窗曝光埋点上报一次",
+      "priority_hint": "P1",
+      "detail": "销售单保存后弹窗展示时上报曝光埋点，且仅一次"
+    },
+    {
+      "id": "RP-003",
+      "title": "用户可选择来源确认或跳过关闭弹窗",
+      "priority_hint": "P1",
+      "detail": "确认或跳过后弹窗关闭，销售单保持已保存"
+    }
+  ],
+  "pending_points": [],
+  "inventory_checks": {
+    "affects_stock": false,
+    "affects_payment": false,
+    "affects_order_lifecycle": true
+  },
+  "schema_version": "6.0"
+}

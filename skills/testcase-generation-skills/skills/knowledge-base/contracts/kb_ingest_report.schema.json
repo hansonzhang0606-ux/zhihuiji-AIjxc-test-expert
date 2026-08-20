@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/kb_ingest_report.schema.json",
+  "title": "KbIngestReport",
+  "description": "Demand 6.3 apply 后报告",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ok",
+    "overview_id",
+    "review_id",
+    "source_fingerprint",
+    "base_commit",
+    "changeset_hash",
+    "changed_paths",
+    "validation",
+    "index",
+    "git"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "6.3" },
+    "ok": { "type": "boolean" },
+    "overview_id": { "type": "string" },
+    "review_id": { "type": "string" },
+    "source_fingerprint": { "type": "string" },
+    "base_commit": { "type": "string" },
+    "resulting_commit": { "type": ["string", "null"] },
+    "changeset_hash": { "type": "string" },
+    "changed_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rebuilt"],
+      "properties": {
+        "rebuilt": { "type": "boolean" },
+        "path": { "type": "string" }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["skipped", "committed", "pushed", "push_pending", "stopped"]
+        },
+        "detail": { "type": "string" }
+      }
+    },
+    "degrade_mode": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "service_local",
+        "git_offline_local",
+        "empty_kb",
+        "write_push_pending",
+        "write_stopped"
+      ]
+    },
+    "errors": { "type": "array", "items": { "type": "string" } }
+  }
+}

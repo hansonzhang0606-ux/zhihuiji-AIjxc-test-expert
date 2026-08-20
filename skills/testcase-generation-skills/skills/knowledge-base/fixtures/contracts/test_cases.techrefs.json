@@ -1,0 +1,34 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "schema_version": "6.0",
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "title": "打开销售单列表页",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "product_tags": ["ailit"],
+      "version_tags": ["单店版"],
+      "platform_tags": ["PC端"],
+      "priority": "P0",
+      "precondition": "已登录",
+      "steps": [
+        {
+          "order": 1,
+          "action": "打开销售单列表页",
+          "expected": "列表展示"
+        }
+      ],
+      "source": ["TP-001"],
+      "technical_refs": [
+        {
+          "type": "page_url",
+          "platform": "web",
+          "page_id": "销售单列表页",
+          "target": "/sales/order/list",
+          "kb_ref": "DF-010"
+        }
+      ]
+    }
+  ]
+}

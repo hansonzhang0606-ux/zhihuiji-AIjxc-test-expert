@@ -1,0 +1,17 @@
+{
+  "schema_version": "6.4",
+  "finalized": true,
+  "finalized_at": "2026-08-06T00:00:00.000Z",
+  "artifacts": [
+    {
+      "type": "c_tc",
+      "path": "script/stage4/test_cases.json",
+      "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    },
+    {
+      "type": "xmind",
+      "path": "用例.xmind",
+      "sha256": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
+    }
+  ]
+}

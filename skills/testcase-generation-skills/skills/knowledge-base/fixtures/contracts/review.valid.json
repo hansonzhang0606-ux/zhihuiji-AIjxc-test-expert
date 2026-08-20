@@ -1,0 +1,25 @@
+{
+  "schema_version": "6.3",
+  "review_id": "rv-20260806-001",
+  "overview_id": "ov-20260806-001",
+  "source_fingerprint": "sha256:deadbeef01",
+  "base_commit": "local:abc12345",
+  "changeset_hash": "sha256:cset0001",
+  "created_at": "2026-08-06T02:05:00.000Z",
+  "selected_change_ids": ["CH-001", "CH-002"],
+  "review_root": "E:/tmp/kb_review/ov-20260806-001",
+  "files": [
+    {
+      "target_ref": "销售/销售/页面关系.md",
+      "review_path": "files/销售/销售/页面关系.md",
+      "change_ids": ["CH-001"]
+    },
+    {
+      "target_ref": "销售/销售/主页面_销售单列表页.md",
+      "review_path": "files/销售/销售/主页面_销售单列表页.md",
+      "change_ids": ["CH-002"]
+    }
+  ],
+  "diff_path": "diff.patch",
+  "content_confirmed": false
+}

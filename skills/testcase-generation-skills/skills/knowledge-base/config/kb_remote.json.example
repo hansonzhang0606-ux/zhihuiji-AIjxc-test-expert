@@ -1,0 +1,68 @@
+{
+
+  "enabled": false,
+
+  "repo_url": "https://git.kingdee.com/my-own-test-hub/knowledge-base.git",
+
+  "branch": "main",
+
+  "local_path": "E:/data/spark-knowledge-base",
+
+  "auth": {
+
+    "mode": "prompt_or_env",
+
+    "preferred": ["env", "credential_helper", "prompt"],
+
+    "username_env": "KB_GIT_USERNAME",
+
+    "token_env": "KB_GIT_TOKEN",
+
+    "ask_on_auth_failure": true,
+
+    "store_prompted_secret": "session_only"
+
+  },
+
+  "pull": {
+
+    "ff_only": true
+
+  },
+
+  "push": {
+
+    "mode": "direct",
+
+    "create_commit": true,
+
+    "message_prefix": "kb:",
+
+    "exclude_paths": ["知识库索引.json", "**/*.tmp", ".DS_Store"]
+
+  },
+
+  "service": {
+
+    "mode": "optional",
+
+    "base_url": "http://172.21.42.31:8787",
+
+    "auth": {
+
+      "mode": "optional_bearer_env",
+
+      "token_env": "KB_SERVICE_TOKEN"
+
+    },
+
+    "timeout_ms": 15000,
+
+    "fallback_to_local_git": true
+
+  },
+
+  "conflict_policy": "stop_and_report"
+
+}
+

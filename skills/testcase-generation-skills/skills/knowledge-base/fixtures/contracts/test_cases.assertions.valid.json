@@ -1,0 +1,47 @@
+{
+  "requirement_title": "商品搜索接口断言",
+  "schema_version": "6.0",
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "title": "搜索全部类别商品",
+      "module_l1": "销售",
+      "product_tags": ["ailit"],
+      "version_tags": ["单店版"],
+      "platform_tags": ["APP端"],
+      "priority": "P0",
+      "precondition": "已进入销售开单页",
+      "steps": [
+        {
+          "order": 1,
+          "action": "搜索商品 B",
+          "expected": "展示商品 B"
+        }
+      ],
+      "source": ["TP-001"],
+      "technical_refs": [
+        {
+          "type": "backend_api",
+          "platform": "app",
+          "page_id": "商品选择页",
+          "element_name": "顶部.搜索框",
+          "method": "GET",
+          "target": "/v1/baseinfo/product/query/list",
+          "kb_ref": "DF-064",
+          "assertions": [
+            {
+              "location": "status",
+              "operator": "eq",
+              "expected": 200
+            },
+            {
+              "location": "body",
+              "json_path": "$.data.list",
+              "operator": "unique"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

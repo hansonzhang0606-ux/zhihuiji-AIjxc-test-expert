@@ -1,0 +1,39 @@
+{
+  "schema_version": "6.4",
+  "captured_at": "2026-08-06T10:20:15.830Z",
+  "note": "Post WP-64 implementation baseline. Pre-6.4 functional P0 produced 0 candidates when only tech-ref channel ran.",
+  "functional_p0": {
+    "file": "functional_p0.input.xmind",
+    "expect_min_candidates": 1,
+    "expect_kinds": [
+      "page",
+      "page_relation",
+      "page_element"
+    ],
+    "expect_exclude_page_id": "忽略页",
+    "actual_kinds": [
+      "page_relation",
+      "page",
+      "page_element"
+    ],
+    "actual_count": 6
+  },
+  "techref_p0": {
+    "file": "techref_p0.input.xmind",
+    "expect_kinds": [
+      "page",
+      "page_relation",
+      "page_element",
+      "page_url",
+      "backend_api"
+    ],
+    "actual_kinds": [
+      "backend_api",
+      "page_relation",
+      "page",
+      "page_element",
+      "page_url"
+    ],
+    "actual_count": 6
+  }
+}

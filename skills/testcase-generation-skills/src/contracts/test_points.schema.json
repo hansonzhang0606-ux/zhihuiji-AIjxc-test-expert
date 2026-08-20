@@ -1,0 +1,535 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/test_points.schema.json",
+  "title": "TestPoints",
+  "description": "Demand 6.0 测试点契约（FOUND-02 / C-TP）。路径：script/stage3/test_points.json。主键 requirement_title；不使用故事编号。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "requirement_title",
+    "test_essence",
+    "test_points",
+    "unmatched_count"
+  ],
+  "properties": {
+    "test_essence": {
+      "type": "string",
+      "minLength": 1,
+      "description": "一句话测试本质"
+    },
+    "test_points": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/testPoint"
+      }
+    },
+    "unmatched_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "module_match=unmatched 的测试点数量；>0 时禁止进入 Stage4"
+    },
+    "merge_report": {
+      "$ref": "#/$defs/mergeReport",
+      "description": "亦可拆到 script/stage3/merge_report.json，字段形状相同"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "6.0"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requirement_title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "需求文档 title（清洗后）"
+    }
+  },
+  "$defs": {
+    "priority": {
+      "type": "string",
+      "enum": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    "productTag": {
+      "type": "string",
+      "enum": [
+        "智慧记AI进销存",
+        "ailit",
+        "智慧记",
+        "智慧记零售"
+      ]
+    },
+    "versionTag": {
+      "type": "string",
+      "enum": [
+        "开单版",
+        "单店版",
+        "多店版"
+      ]
+    },
+    "platformTag": {
+      "type": "string",
+      "enum": [
+        "PC端",
+        "APP端",
+        "小程序端",
+        "H5端"
+      ]
+    },
+    "moduleMatch": {
+      "type": "string",
+      "enum": [
+        "matched",
+        "unmatched"
+      ],
+      "description": "matched=模块来自 mapping；unmatched=未匹配严禁自创"
+    },
+    "testPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "priority",
+        "module_l1",
+        "module_match",
+        "product_tags",
+        "version_tags",
+        "platform_tags",
+        "source_rp_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^TP-\\d{3,}$",
+          "description": "如 TP-001"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "module_l1": {
+          "type": "string",
+          "minLength": 1,
+          "description": "一级模块；未匹配时可为「未匹配」"
+        },
+        "module_l2": {
+          "type": "string",
+          "description": "二级模块；未匹配可空"
+        },
+        "module_match": {
+          "$ref": "#/$defs/moduleMatch"
+        },
+        "product_tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/productTag"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "version_tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/versionTag"
+          },
+          "uniqueItems": true,
+          "minItems": 0,
+          "description": "PC/APP 必填；小程序/H5 端按 tag_rules 不判版本则为空"
+        },
+        "platform_tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/platformTag"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "source_rp_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^RP-\\d{3,}$"
+          },
+          "minItems": 0,
+          "description": "追溯需求点；来自 out_of_scope 回归 hint 的点可留空"
+        },
+        "steps_outline": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "测试步骤要点（供用例生成）"
+        },
+        "expected_outline": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "期望要点，建议与 steps_outline 等长"
+        },
+        "is_core_scenario": {
+          "type": "boolean",
+          "description": "开单/收账/支付等核心场景；true 时禁止等价去重"
+        },
+        "is_regression": {
+          "type": "boolean",
+          "description": "是否来自 out_of_scope 的 P3 回归"
+        },
+        "nfr_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "performance",
+            "security",
+            "compatibility",
+            "integration",
+            null
+          ],
+          "description": "非功能类型；功能点为 null"
+        },
+        "merged_from": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "若本点由合并产生，记录被合并的候选 id/标题"
+        },
+        "canonical_key": {
+          "type": "string",
+          "description": "Demand 6.1 P2 可选：因果等价类键（validator 同源）"
+        },
+        "primary_object": {
+          "type": "string",
+          "description": "场景切片主业务对象"
+        },
+        "trigger": { "type": "string" },
+        "condition": { "type": "string" },
+        "primary_outcome": { "type": "string" },
+        "dependency_objects": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "asserted_objects": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cluster_key": {
+          "type": "string",
+          "description": "聚类键；finalize 可自动补全"
+        },
+        "sort_key": {
+          "type": "string",
+          "description": "稳定排序键；Stage4 可复用"
+        },
+        "coverage_candidate": {
+          "type": "string",
+          "enum": ["absorb"],
+          "description": "draft 阶段 absorb 标记；定稿后见 merge_report"
+        },
+        "absorb_reason": { "type": "string" },
+        "technical_refs": {
+          "type": "array",
+          "description": "Demand 6.2/6.3 可选：从 KB facts 固化的页面 URL / 后端接口引用；Stage4 只可复制",
+          "items": { "$ref": "#/$defs/technicalRef" }
+        }
+      }
+    },
+    "technicalRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "platform", "page_id", "target", "kb_ref"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["page_url", "backend_api"]
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["web", "app"]
+        },
+        "page_id": { "type": "string", "minLength": 1 },
+        "element_name": { "type": "string" },
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "WS"]
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "description": "URL 模板或规范化 API path"
+        },
+        "operation": { "type": "string" },
+        "kb_ref": { "type": "string", "minLength": 1 },
+        "assertions": {
+          "type": "array",
+          "description": "Demand 6.4 可选：字段级接口断言；仅 backend_api 使用",
+          "items": { "$ref": "#/$defs/apiAssertion" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "backend_api" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["element_name", "method"]
+          }
+        },
+        {
+          "if": {
+            "required": ["assertions"]
+          },
+          "then": {
+            "properties": { "type": { "const": "backend_api" } }
+          }
+        }
+      ]
+    },
+    "apiAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location", "operator"],
+      "properties": {
+        "location": {
+          "type": "string",
+          "enum": ["status", "header", "body"]
+        },
+        "json_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operator": {
+          "type": "string",
+          "enum": ["eq", "contains", "not_contains", "exists", "not_exists", "unique"]
+        },
+        "expected": {
+          "type": ["string", "number", "boolean", "null"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "location": { "const": "body" } },
+            "required": ["location"]
+          },
+          "then": {
+            "required": ["json_path"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "enum": ["eq", "contains", "not_contains"]
+              }
+            },
+            "required": ["operator"]
+          },
+          "then": {
+            "required": ["expected"]
+          }
+        }
+      ]
+    },
+    "mergeReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rules_applied",
+        "entries"
+      ],
+      "properties": {
+        "rules_applied": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "logic_equivalence",
+              "data_feature_equivalence",
+              "user_intent_equivalence",
+              "risk_prediction_equivalence",
+              "value_below_60",
+              "core_no_merge",
+              "absorb_coverage",
+              "slice_by_primary_object"
+            ]
+          }
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "rule",
+              "kept",
+              "merged_away",
+              "reason"
+            ],
+            "properties": {
+              "rule": {
+                "type": "string"
+              },
+              "kept": {
+                "type": "string"
+              },
+              "merged_away": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "absorb_candidates": {
+          "type": "array",
+          "description": "Demand 6.1：可被主路径步骤吸收、默认不独立成 Stage4 TC 的 TP id 列表项",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tp_id"],
+            "properties": {
+              "tp_id": { "type": "string", "pattern": "^TP-\\d{3,}$" },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "purity_violations": {
+          "type": "array",
+          "description": "主断言混写多主对象（非集成）",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tp_id", "reason"],
+            "properties": {
+              "tp_id": { "type": "string" },
+              "asserted_objects": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "canonical_key_conflicts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "facts_applied": {
+          "type": "array",
+          "description": "临时知识点校验/覆盖追溯（Stage4 勿再读 domain_facts）",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["fact_id", "statement"],
+            "properties": {
+              "fact_id": { "type": "string" },
+              "statement": { "type": "string" },
+              "covered_by_tp_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "coverage": {
+                "type": "string",
+                "enum": ["covered", "gap"]
+              }
+            }
+          }
+        },
+        "vague_references": {
+          "type": "array",
+          "description": "模糊指代（见其他 TP/同上 等）",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tp_id", "excerpt"],
+            "properties": {
+              "tp_id": { "type": "string" },
+              "excerpt": { "type": "string" }
+            }
+          }
+        },
+        "regression_skipped": {
+          "type": "array",
+          "description": "Demand 6.1：C-CTX 中 auto_skip_tp 的回归 hint，3A 默认不生成对应 TP",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "target", "reason"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "product_regression",
+                  "version_regression",
+                  "platform_regression"
+                ]
+              },
+              "target": { "type": "string" },
+              "reason": { "type": "string", "const": "auto_skip_tp" }
+            }
+          }
+        },
+        "path_gaps": {
+          "type": "array",
+          "description": "Demand 6.4：适用页面交互的测试点缺少可信导航路径",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tp_id", "page_id", "platform", "reason"],
+            "properties": {
+              "tp_id": { "type": "string", "pattern": "^TP-\\d{3,}$" },
+              "page_id": { "type": "string", "minLength": 1 },
+              "element_name": { "type": "string", "minLength": 1 },
+              "platform": { "type": "string", "enum": ["web", "app"] },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "api_assertion_gaps": {
+          "type": "array",
+          "description": "Demand 6.4：通过索引显式绑定缺少字段级断言的 backend_api 引用",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tp_id", "technical_ref_index", "missing_fields", "reason"],
+            "properties": {
+              "tp_id": { "type": "string", "pattern": "^TP-\\d{3,}$" },
+              "technical_ref_index": { "type": "integer", "minimum": 0 },
+              "missing_fields": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "enum": ["assertions", "location", "json_path", "operator", "expected"]
+                }
+              },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

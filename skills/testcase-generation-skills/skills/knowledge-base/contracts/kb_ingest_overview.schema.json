@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/kb_ingest_overview.schema.json",
+  "title": "KbIngestOverview",
+  "description": "Demand 6.3 KB-概审机器可读概览",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "overview_id",
+    "source",
+    "source_fingerprint",
+    "base_commit",
+    "changeset_hash",
+    "modules",
+    "items",
+    "conflicts",
+    "skipped"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "6.3" },
+    "overview_id": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "ref"],
+      "properties": {
+        "type": { "type": "string", "enum": ["text", "xmind", "ctc", "confluence"] },
+        "ref": { "type": "string" },
+        "read_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "source_fingerprint": { "type": "string", "minLength": 8 },
+    "base_commit": { "type": "string" },
+    "changeset_hash": { "type": "string", "minLength": 8 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "degrade_mode": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "service_local",
+        "git_offline_local",
+        "empty_kb",
+        "write_push_pending",
+        "write_stopped"
+      ]
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["module_l1", "module_l2"],
+        "properties": {
+          "module_l1": { "type": "string" },
+          "module_l2": { "type": "string" },
+          "pages": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["change_id", "operation", "summary"],
+        "properties": {
+          "change_id": { "type": "string" },
+          "operation": {
+            "type": "string",
+            "enum": ["add", "update", "deprecate", "relation_change", "skip", "cover"]
+          },
+          "module_l1": { "type": "string" },
+          "module_l2": { "type": "string" },
+          "page_id": { "type": "string" },
+          "element_name": { "type": "string" },
+          "platform": { "type": "string", "enum": ["web", "app"] },
+          "summary": { "type": "string", "maxLength": 80 },
+          "selected": { "type": "boolean" },
+          "api_rich": {
+            "type": "boolean",
+            "description": "Demand 6.4：P0 条目含结构化 backend_api 引用；仅用于 P0 集合内排序"
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["change_id", "old_summary", "new_summary"],
+        "properties": {
+          "change_id": { "type": "string" },
+          "old_summary": { "type": "string" },
+          "new_summary": { "type": "string" },
+          "reason_tag": { "type": "string" },
+          "resolution": {
+            "type": ["string", "null"],
+            "enum": [null, "accept_new", "keep_old", "rewrite_both"]
+          }
+        }
+      }
+    },
+    "skipped": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["reason", "summary"],
+        "properties": {
+          "reason": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "completeness_report": {
+      "$ref": "https://testcase-generation.local/contracts/kb_completeness_report.schema.json",
+      "description": "Demand 6.4 可选写前完整性报告"
+    },
+    "blocked_write": {
+      "type": "boolean",
+      "description": "必须与 completeness_report.blocked_write 一致"
+    },
+    "completeness_report_hash": { "type": "string", "minLength": 8 },
+    "source_manifest": { "type": "object" },
+    "source_manifest_path": { "type": "string" },
+    "source_manifest_fingerprint": { "type": "string", "minLength": 8 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "completeness_report": {
+            "properties": { "blocked_write": { "const": true } },
+            "required": ["blocked_write"]
+          }
+        },
+        "required": ["completeness_report"]
+      },
+      "then": {
+        "properties": { "blocked_write": { "const": true } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "completeness_report": {
+            "properties": { "blocked_write": { "const": false } },
+            "required": ["blocked_write"]
+          }
+        },
+        "required": ["completeness_report"]
+      },
+      "then": {
+        "properties": { "blocked_write": { "const": false } }
+      }
+    }
+  ]
+}

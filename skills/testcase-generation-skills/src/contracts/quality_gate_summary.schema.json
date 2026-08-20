@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/quality_gate_summary.schema.json",
+  "title": "QualityGateSummary",
+  "description": "Demand 6.1 P2 可选跨阶段质量门禁聚合；默认不自动生成。路径：script/config/quality_gate_summary.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "requirement_title", "progress"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "6.1"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requirement_title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["test_context_approved", "stage1_approved", "stage3_approved"],
+      "properties": {
+        "test_context_approved": { "type": "boolean" },
+        "stage1_approved": { "type": "boolean" },
+        "stage3_approved": { "type": "boolean" },
+        "unmatched_count": { "type": "integer", "minimum": 0 },
+        "stage4_blocked_unmatched": { "type": "boolean" }
+      }
+    },
+    "regression": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hints_total": { "type": "integer", "minimum": 0 },
+        "auto_skip_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "stage1": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "confirmed_count": { "type": "integer", "minimum": 0 },
+        "pending_count": { "type": "integer", "minimum": 0 },
+        "domain_facts_present": { "type": "boolean" }
+      }
+    },
+    "stage3": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "test_points_count": { "type": "integer", "minimum": 0 },
+        "merge_report": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "absorb_candidates_count": { "type": "integer", "minimum": 0 },
+            "regression_skipped_count": { "type": "integer", "minimum": 0 },
+            "purity_violations_count": { "type": "integer", "minimum": 0 },
+            "facts_applied_count": { "type": "integer", "minimum": 0 },
+            "facts_gap_count": { "type": "integer", "minimum": 0 },
+            "canonical_key_conflicts_count": { "type": "integer", "minimum": 0 },
+            "vague_references_count": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "matrix_filter_warnings_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "stage4": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "present": { "type": "boolean" },
+        "test_cases_count": { "type": "integer", "minimum": 0 },
+        "overall_quality_score": { "type": "number" },
+        "demand61": { "type": "object" }
+      }
+    },
+    "human_review_pending": {
+      "type": "array",
+      "description": "建议人审关注的待裁决项（来自既有报告聚合，非新门禁）",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "message"],
+        "properties": {
+          "kind": { "type": "string" },
+          "message": { "type": "string" },
+          "refs": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

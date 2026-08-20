@@ -1,0 +1,49 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "schema_version": "6.0",
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "title": "新用户首单保存成功弹出调研弹窗且无Toast",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "product_tags": ["ailit"],
+      "version_tags": ["开单版", "单店版", "多店版"],
+      "platform_tags": ["PC端", "APP端"],
+      "priority": "P0",
+      "precondition": "ailit账号无历史销售单；已登录PC或APP",
+      "steps": [
+        {
+          "order": 1,
+          "action": "创建销售单并填写必填项后保存",
+          "expected": "保存成功且弹出客户来源调研弹窗；不显示原保存成功Toast"
+        },
+        {
+          "order": 2,
+          "action": "查看埋点上报记录",
+          "expected": "曝光事件上报一次"
+        }
+      ],
+      "source": ["TP-001", "RP-001"]
+    },
+    {
+      "id": "TC-002",
+      "title": "弹窗曝光埋点仅上报一次",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "product_tags": ["ailit"],
+      "version_tags": ["开单版"],
+      "platform_tags": ["PC端"],
+      "priority": "P1",
+      "precondition": "已触发调研弹窗展示",
+      "steps": [
+        {
+          "order": 1,
+          "action": "查看埋点上报记录",
+          "expected": "曝光事件仅上报一次"
+        }
+      ],
+      "source": ["TP-002", "RP-002"]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "6.1",
+  "requirement_title": "客户来源调研弹窗",
+  "facts": [
+    {
+      "id": "DF-012",
+      "statement": "缺少 element_name 应失败",
+      "source": "kb_applied",
+      "session_only": false,
+      "platforms": ["web"],
+      "fact_kind": "backend_api",
+      "page_id": "销售单列表页",
+      "backend_api": {
+        "method": "GET",
+        "path": "/api/v1/columns"
+      },
+      "kb_ref": "销售/销售/主页面_销售单列表页.md#bad"
+    }
+  ]
+}

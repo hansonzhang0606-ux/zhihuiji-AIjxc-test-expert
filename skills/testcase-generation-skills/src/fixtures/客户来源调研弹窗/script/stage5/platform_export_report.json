@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "stage": "stage5_export",
+  "exported_at": "2026-08-18T07:10:00.344Z",
+  "ok": true,
+  "requirement_title": "客户来源调研弹窗",
+  "case_group": "2026-V0.0.0-web端-客户来源调研弹窗",
+  "relate_req_code": "PRJ-TEST-00001",
+  "priority_filter": "P0",
+  "case_count": 1,
+  "output": "E:\\testcase_zhihuiji_agent\\testcase-generation-skills\\testcase-generation-skills\\src\\fixtures\\客户来源调研弹窗\\script\\stage5\\test_cases_P0_platform.xlsx",
+  "fields": {
+    "team": "智慧记-星火",
+    "product": "星火",
+    "modulePath": "智慧记AI进销存-智慧记AI进销存",
+    "caseType": "功能测试",
+    "manager": "傅文浩",
+    "source": ""
+  }
+}

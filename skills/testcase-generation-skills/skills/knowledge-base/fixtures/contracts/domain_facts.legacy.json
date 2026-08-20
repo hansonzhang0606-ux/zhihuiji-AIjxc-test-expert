@@ -1,0 +1,14 @@
+{
+  "schema_version": "6.1",
+  "requirement_title": "客户来源调研弹窗",
+  "facts": [
+    {
+      "id": "DF-001",
+      "statement": "新用户首单保存成功后弹出客户来源调研弹窗",
+      "source": "human_review",
+      "session_only": true,
+      "forbid_patterns": ["Toast"]
+    }
+  ],
+  "updated_at": "2026-08-06T02:00:00.000Z"
+}

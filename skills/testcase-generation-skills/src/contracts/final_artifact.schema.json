@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/final_artifact.schema.json",
+  "title": "FinalArtifactManifest",
+  "description": "Demand 6.4 Stage4 最终产物清单；清单自身不参与 hash，避免循环依赖",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "finalized",
+    "finalized_at",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "6.4" },
+    "finalized": { "type": "boolean", "const": true },
+    "finalized_at": { "type": "string", "format": "date-time" },
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/artifact" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "type": { "const": "c_tc" } },
+            "required": ["type"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "type": { "const": "xmind" } },
+            "required": ["type"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "path", "sha256"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["c_tc", "xmind"]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?![\\\\/])(?!.*\\.\\.).+",
+          "description": "相对工作区路径；不得为绝对路径或包含父目录穿越"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^(?:sha256:)?[A-Fa-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

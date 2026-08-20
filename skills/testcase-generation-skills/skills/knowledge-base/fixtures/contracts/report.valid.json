@@ -1,0 +1,19 @@
+{
+  "schema_version": "6.3",
+  "ok": true,
+  "overview_id": "ov-20260806-001",
+  "review_id": "rv-20260806-001",
+  "source_fingerprint": "sha256:deadbeef01",
+  "base_commit": "local:abc12345",
+  "resulting_commit": "local:def67890",
+  "changeset_hash": "sha256:cset0001",
+  "changed_paths": [
+    "销售/销售/页面关系.md",
+    "销售/销售/主页面_销售单列表页.md"
+  ],
+  "validation": { "ok": true, "errors": [], "warnings": [] },
+  "index": { "rebuilt": true, "path": "知识库索引.json" },
+  "git": { "action": "push_pending", "detail": "network unreachable" },
+  "degrade_mode": "write_push_pending",
+  "errors": []
+}

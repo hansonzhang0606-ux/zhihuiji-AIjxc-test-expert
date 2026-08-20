@@ -1,0 +1,43 @@
+{
+  "schema_version": "6.4",
+  "source_type": "ctc",
+  "source_hash": "sha256:0123456789abcdef",
+  "p0_case_ids": ["TC-001"],
+  "extracted": {
+    "pages": [
+      {
+        "kind": "page",
+        "page_id": "商品选择页",
+        "platform": "app",
+        "fields_present": ["page_id", "platform"]
+      }
+    ],
+    "relations": [],
+    "elements": [
+      {
+        "kind": "page_element",
+        "page_id": "商品选择页",
+        "name": "顶部.搜索框",
+        "platform": "app",
+        "fields_present": ["name", "interaction"]
+      }
+    ]
+  },
+  "blocking_gaps": [
+    {
+      "ref": "顶部.搜索框",
+      "field": "后端接口",
+      "platform": "app",
+      "reason": "api_or_pure_frontend_unknown"
+    }
+  ],
+  "warning_gaps": [
+    {
+      "ref": "顶部.搜索框",
+      "field": "位置",
+      "platform": "app"
+    }
+  ],
+  "blocked_write": true,
+  "next_action": "human_fill_then_reoverview"
+}

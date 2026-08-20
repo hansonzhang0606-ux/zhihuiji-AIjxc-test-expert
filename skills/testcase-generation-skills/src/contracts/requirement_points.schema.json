@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/requirement_points.schema.json",
+  "title": "RequirementPoints",
+  "description": "Demand 6.0 需求点契约（FOUND-02 / C-RP）。路径：script/stage1/requirement_points.json。主键为 requirement_title（需求文档 title），不使用故事编号。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "requirement_title",
+    "requirement_essence",
+    "domain_objects",
+    "state_machine",
+    "boundaries",
+    "test_context",
+    "confirmed_points",
+    "pending_points",
+    "inventory_checks"
+  ],
+  "properties": {
+    "requirement_essence": {
+      "type": "string",
+      "minLength": 1,
+      "description": "一句话需求本质"
+    },
+    "domain_objects": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "业务对象列表"
+    },
+    "state_machine": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "相关状态/流转要点"
+    },
+    "boundaries": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "边界与约束"
+    },
+    "test_context": {
+      "$ref": "test_context.schema.json",
+      "description": "三维测试上下文；须与 config/test_context.json 一致"
+    },
+    "confirmed_points": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/requirementPoint"
+      },
+      "description": "已确认（或可直接进入后续）的需求点"
+    },
+    "pending_points": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/pendingRequirementPoint"
+      },
+      "description": "待确认需求点；占比过高应提示 Full Path"
+    },
+    "inventory_checks": {
+      "$ref": "#/$defs/inventoryChecks"
+    },
+    "out_of_bound_hints": {
+      "type": "array",
+      "description": "需求越界提示（与已锁定上下文冲突、或明显超出本次范围）；人审①′高亮",
+      "items": {
+        "$ref": "#/$defs/outOfBoundHint"
+      }
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "6.0"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requirement_title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "需求文档 title（清洗后），与工作区目录名、output 文件名前缀一致"
+    }
+  },
+  "$defs": {
+    "priority": {
+      "type": "string",
+      "enum": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    "outOfBoundHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "summary", "reason"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^OOB-\\d{3,}$"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "越界原因（如与 out_of_scope 端冲突、超出非目标）"
+        },
+        "source_excerpt": {
+          "type": "string",
+          "description": "原文摘录（可选）"
+        }
+      }
+    },
+    "requirementPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "detail"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^RP-\\d{3,}$",
+          "description": "如 RP-001"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority_hint": {
+          "$ref": "#/$defs/priority"
+        }
+      }
+    },
+    "pendingRequirementPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "pending_reason"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^RP-\\d{3,}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detail": {
+          "type": "string"
+        },
+        "pending_reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "待确认原因"
+        },
+        "priority_hint": {
+          "$ref": "#/$defs/priority"
+        }
+      }
+    },
+    "inventoryChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "affects_stock",
+        "affects_payment",
+        "affects_order_lifecycle"
+      ],
+      "description": "进销存强制自检：为 true 时 confirmed/pending 中须有对应链路点，否则人审①高亮",
+      "properties": {
+        "affects_stock": {
+          "type": "boolean"
+        },
+        "affects_payment": {
+          "type": "boolean"
+        },
+        "affects_order_lifecycle": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

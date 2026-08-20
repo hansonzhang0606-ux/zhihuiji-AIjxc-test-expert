@@ -1,0 +1,32 @@
+{
+  "schema_version": "6.2.0",
+  "matrix_source": "templates/模块矩阵知识库/模块矩阵总览.md",
+  "matrix_section": "【机器区】电脑端 · 功能支持矩阵",
+  "requirement_title": "3B矩阵标签自测",
+  "summary": {
+    "total": 1,
+    "adjusted": 1,
+    "warnings": 0
+  },
+  "entries": [
+    {
+      "tp_id": "TP-001",
+      "module_l1": "商品",
+      "module_l2": "套餐",
+      "removed_version_tags": [
+        "开单版"
+      ],
+      "kept_version_tags": [
+        "单店版",
+        "多店版"
+      ],
+      "removed_product_tags": [],
+      "kept_product_tags": [
+        "智慧记AI进销存"
+      ],
+      "message": "已按功能矩阵剔除不支持的版本标签"
+    }
+  ],
+  "warnings": [],
+  "message": "矩阵标签裁剪完成：调整 1 条，告警 0 条"
+}

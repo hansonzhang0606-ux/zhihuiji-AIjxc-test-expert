@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/test_context.schema.json",
+  "title": "TestContext",
+  "description": "Demand 6.0 测试上下文契约（FOUND-01）。路径：script/config/test_context.json。三维：产品/版本/端；每维 in_scope ∪ out_of_scope = 全量枚举且不相交（完整性由校验脚本在 FOUND-05 强制）。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["products", "versions", "platforms", "regression_hints"],
+  "properties": {
+    "products": {
+      "$ref": "#/$defs/productDimension",
+      "description": "产品维度（全称）：智慧记AI进销存 / ailit / 智慧记 / 智慧记零售"
+    },
+    "versions": {
+      "$ref": "#/$defs/versionDimension",
+      "description": "版本维度：开单版 / 单店版 / 多店版（禁止放入产品全称或国内版/国际版别名）"
+    },
+    "platforms": {
+      "$ref": "#/$defs/platformDimension",
+      "description": "端维度：PC端 / APP端 / 小程序端 / H5端（无收银机端）"
+    },
+    "regression_hints": {
+      "type": "array",
+      "description": "对每个 out_of_scope 项生成 1 条 P3 回归提示；该维 out 为空则无对应 hint",
+      "items": {
+        "$ref": "#/$defs/regressionHint"
+      }
+    },
+    "requirement_title": {
+      "type": "string",
+      "description": "可选：识别所用需求标题（便于人审回溯）"
+    },
+    "recognized_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "可选：识别时间 ISO8601"
+    }
+  },
+  "$defs": {
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["title", "body", "default", "parent", "user_confirmed"],
+      "description": "title=标题标识；body=正文；default=无法识别用默认；parent=Confluence 父级页面定产品线（v6.0.1）；user_confirmed=人审①确认后"
+    },
+    "productEnum": {
+      "type": "string",
+      "enum": ["智慧记AI进销存", "ailit", "智慧记", "智慧记零售"],
+      "description": "契约内一律写全称。国内版→智慧记AI进销存；国际版→ailit；零售→智慧记零售"
+    },
+    "versionEnum": {
+      "type": "string",
+      "enum": ["开单版", "单店版", "多店版"]
+    },
+    "platformEnum": {
+      "type": "string",
+      "enum": ["PC端", "APP端", "小程序端", "H5端"]
+    },
+    "productDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["in_scope", "out_of_scope", "confidence", "source"],
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/productEnum" },
+          "uniqueItems": true,
+          "minItems": 1,
+          "description": "本次涉及的产品；无法识别时默认 [智慧记AI进销存] 且 confidence=low"
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/productEnum" },
+          "uniqueItems": true,
+          "description": "全量减去 in_scope；与 in_scope 不相交"
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "source": { "$ref": "#/$defs/source" }
+      }
+    },
+    "versionDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["in_scope", "out_of_scope", "confidence", "source"],
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/versionEnum" },
+          "uniqueItems": true,
+          "minItems": 1,
+          "description": "本次涉及的版本；无法识别时默认三者全进 in_scope 且 confidence=low"
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/versionEnum" },
+          "uniqueItems": true
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "source": { "$ref": "#/$defs/source" }
+      }
+    },
+    "platformDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["in_scope", "out_of_scope", "confidence", "source"],
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/platformEnum" },
+          "uniqueItems": true,
+          "minItems": 1,
+          "description": "本次涉及的端；无法识别时默认 [PC端, APP端] 且 confidence=low（与历史 1.3 默认对齐，可在人审改）"
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/platformEnum" },
+          "uniqueItems": true
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "source": { "$ref": "#/$defs/source" }
+      }
+    },
+    "regressionHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "target", "priority", "suggestion"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "product_regression",
+            "version_regression",
+            "platform_regression"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "description": "必须落在对应维度的 out_of_scope 中",
+          "minLength": 1
+        },
+        "priority": {
+          "type": "string",
+          "const": "P3"
+        },
+        "suggestion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "auto_skip_tp": {
+          "type": "boolean",
+          "description": "Demand 6.1：true 时 3A 默认不生成对应回归 TP；人审①可改为 false 显式保留"
+        }
+      }
+    }
+  }
+}

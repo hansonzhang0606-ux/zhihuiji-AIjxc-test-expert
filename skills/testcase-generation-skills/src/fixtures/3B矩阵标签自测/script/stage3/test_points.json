@@ -1,0 +1,33 @@
+{
+  "schema_version": "6.0",
+  "requirement_title": "3B矩阵标签自测",
+  "test_essence": "3B",
+  "unmatched_count": 0,
+  "test_points": [
+    {
+      "id": "TP-001",
+      "title": "套餐",
+      "priority": "P1",
+      "module_l1": "商品",
+      "module_l2": "套餐",
+      "module_match": "matched",
+      "product_tags": [
+        "智慧记AI进销存"
+      ],
+      "version_tags": [
+        "单店版",
+        "多店版"
+      ],
+      "platform_tags": [
+        "PC端"
+      ],
+      "source_rp_ids": [],
+      "steps_outline": [
+        "x"
+      ],
+      "expected_outline": [
+        "y"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# 自然语言补充样例
+模块: 销售 / 销售
+页面: 销售单列表页
+端: web
+URL: /sales/order/list
+元素: 表头.设置
+API: GET /api/v1/columns 元素:表头.设置 查询可选列

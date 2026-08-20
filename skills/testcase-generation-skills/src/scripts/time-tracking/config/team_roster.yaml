@@ -1,0 +1,111 @@
+# 测试人员花名册（多业务线）
+# Agent 启动时读取此文件，通过盲输入+精确匹配验证用户身份
+# 不展示列表，用户输入姓名后与 active: true 的成员匹配
+# 匹配失败则拒绝使用，无 fallback 选项
+#
+# 业务线编码对照：
+#   XD     - 效贷
+#   JWY    - 泾渭云
+#   XR     - 效融
+#   XXD    - 小贷
+#   ZHJ    - 智慧记+运营系统
+#   AIJXC  - AI进销存
+#   ZHJLS  - 智慧记零售
+
+members:
+  # ========== XD 效贷 ==========
+  - name: "周峰"
+    role: "功能测试"
+    biz_line_code: ["XD"]
+    active: true
+
+  - name: "吴香康"
+    role: "功能测试"
+    biz_line_code: ["XD"]
+    active: true
+
+  - name: "何甜"
+    role: "功能测试"
+    biz_line_code: ["XD", "XR", "XXD"]
+    active: true
+
+  # 张云星：跨全部业务线（效能平台管理员/全业务线测试）
+  - name: "张云星"
+    role: "功能测试"
+    biz_line_code: ["XD", "JWY", "XR", "XXD", "ZHJ", "AIJXC", "ZHJLS"]
+    active: true
+
+  # ========== JWY 泾渭云 ==========
+  - name: "余萍"
+    role: "功能测试"
+    biz_line_code: ["JWY"]
+    active: true
+
+  - name: "张小增"
+    role: "功能测试"
+    biz_line_code: ["JWY"]
+    active: true
+
+  - name: "陈香"
+    role: "功能测试"
+    biz_line_code: ["JWY", "ZHJ", "ZHJLS"]
+    active: true
+
+  - name: "汪池池"
+    role: "功能测试"
+    biz_line_code: ["JWY"]
+    active: true
+
+  - name: "陈雷"
+    role: "功能测试"
+    biz_line_code: ["JWY"]
+    active: true
+
+  - name: "张登山"
+    role: "功能测试"
+    biz_line_code: ["JWY"]
+    active: true
+
+  # ========== XR 效融 ==========
+
+  # ========== XXD 小贷 ==========
+
+  # ========== ZHJ 智慧记+运营系统 ==========
+  - name: "詹惠英"
+    role: "功能测试"
+    biz_line_code: ["ZHJ", "ZHJLS"]
+    active: true
+
+  - name: "李静"
+    role: "功能测试"
+    biz_line_code: ["ZHJ", "ZHJLS"]
+    active: true
+
+  # ========== AIJXC AI进销存 ==========
+  - name: "赵刚"
+    role: "功能测试"
+    biz_line_code: ["AIJXC"]
+    active: true
+
+  - name: "王仲欢"
+    role: "功能测试"
+    biz_line_code: ["AIJXC"]
+    active: true
+
+  - name: "傅文浩"
+    role: "功能测试"
+    biz_line_code: ["AIJXC"]
+    active: true
+
+  - name: "郭翠萍"
+    role: "功能测试"
+    biz_line_code: ["AIJXC"]
+    active: true
+
+  # ========== ZHJLS 智慧记零售 ==========
+
+# 花名册维护说明：
+# 1. 新增人员：在 members 下添加新条目，name 和 role 必填，biz_line_code 为业务线编码列表
+# 2. 人员离职：将 active 设为 false，不要直接删除（保留历史数据可追溯）
+# 3. 一个人可属于多个业务线，在 biz_line_code 数组中列出所有编码即可
+# 4. 业务线编码参照文件头部对照表

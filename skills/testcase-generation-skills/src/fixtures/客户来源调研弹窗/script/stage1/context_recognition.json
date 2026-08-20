@@ -1,0 +1,33 @@
+{
+  "schema_version": "6.0",
+  "requirement_title": "客户来源调研弹窗",
+  "source_md": "input/需求文档/客户来源调研弹窗.md",
+  "title_hits": {
+    "products": [
+      "ailit"
+    ],
+    "versions": [],
+    "platforms": [
+      "PC端",
+      "APP端"
+    ]
+  },
+  "body_hits": {
+    "products": [
+      "ailit"
+    ],
+    "versions": [],
+    "platforms": [
+      "PC端",
+      "APP端"
+    ]
+  },
+  "full_flags": {
+    "products": false,
+    "versions": false,
+    "platforms": false
+  },
+  "tag_rules_path": "E:\\testcase_zhihuiji_agent\\req-anlys-skills\\testcase-generation\\src\\templates\\stage3\\tag_rules.md",
+  "tag_rules_exists": true,
+  "completed_at": "2026-07-21T11:02:20.226Z"
+}

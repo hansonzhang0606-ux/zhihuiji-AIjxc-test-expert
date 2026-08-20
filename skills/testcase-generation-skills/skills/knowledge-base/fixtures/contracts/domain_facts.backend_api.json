@@ -1,0 +1,22 @@
+{
+  "schema_version": "6.1",
+  "requirement_title": "客户来源调研弹窗",
+  "facts": [
+    {
+      "id": "DF-011",
+      "statement": "销售单列表页表头.设置 Web 接口 GET /api/v1/columns",
+      "source": "kb_applied",
+      "session_only": false,
+      "platforms": ["web"],
+      "fact_kind": "backend_api",
+      "page_id": "销售单列表页",
+      "element_name": "表头.设置",
+      "backend_api": {
+        "method": "GET",
+        "path": "/api/v1/columns",
+        "operation": "查询可选列"
+      },
+      "kb_ref": "销售/销售/主页面_销售单列表页.md#表头.设置"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+# 本地/产物忽略（testcase-generation 包内）
+
+# 生成工作区
+/output/
+/code/
+
+# 误留在根上的空目录或缓存
+/scripts/
+
+# 6.2 本地可重建知识库索引（业务 Markdown 才是语义真源）
+/src/templates/模块矩阵知识库/知识库索引.json
+
+# 本机 KB 远程实配（含内网地址；勿提交）
+/src/config/kb_remote.json
+/skills/knowledge-base/config/kb_remote.json
+
+# Git / Service 凭据（可用 .env.example 复制；禁止提交真实 .env）
+.env
+.env.*
+!.env.example
+**/.env
+!**/.env.example
+/src/config/.env
+/skills/knowledge-base/config/.env
+
+# 依赖（若有人在错误层级 npm install）
+node_modules/

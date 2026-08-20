@@ -1,0 +1,30 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "test_essence": "非法 backend_api 缺 method",
+  "unmatched_count": 0,
+  "schema_version": "6.0",
+  "test_points": [
+    {
+      "id": "TP-001",
+      "title": "非法技术引用",
+      "priority": "P0",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "module_match": "matched",
+      "product_tags": ["ailit"],
+      "version_tags": ["单店版"],
+      "platform_tags": ["PC端"],
+      "source_rp_ids": ["RP-001"],
+      "technical_refs": [
+        {
+          "type": "backend_api",
+          "platform": "web",
+          "page_id": "销售单列表页",
+          "element_name": "表头.设置",
+          "target": "/api/v1/columns",
+          "kb_ref": "DF-011"
+        }
+      ]
+    }
+  ]
+}

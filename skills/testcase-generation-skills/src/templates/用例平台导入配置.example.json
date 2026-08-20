@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "team": "智慧记-星火",
+    "product": "星火",
+    "modulePath": "智慧记AI进销存-智慧记AI进销存",
+    "caseType": "功能测试",
+    "manager": "傅文浩",
+    "autoState": "否",
+    "source": "",
+    "priorityFilter": "P0"
+  },
+  "story_by_title_hint": [
+    { "hint": "优化分类下搜索商品逻辑", "prj": "PRJ-00758363" },
+    { "hint": "版本降级时增购员工", "prj": "PRJ-00757902" },
+    { "hint": "引导下载App", "prj": "PRJ-00766833" },
+    { "hint": "周迭代", "prj": "PRJ-00766833" }
+  ],
+  "_comment": "复制为 用例平台导入配置.json 或写入工作区 script/config/platform_import.json；relate_req_code 优先于 hint 匹配"
+}

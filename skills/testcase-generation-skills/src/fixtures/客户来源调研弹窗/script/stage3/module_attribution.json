@@ -1,0 +1,39 @@
+{
+  "schema_version": "6.0",
+  "requirement_title": "客户来源调研弹窗",
+  "mapping_source": "src/templates/模块匹配规则.md",
+  "mapping_version": "1.1",
+  "mapping_version_expected": "1.1",
+  "mapping_version_ok": true,
+  "attributions": [
+    {
+      "rp_id": "RP-001",
+      "rp_title": "新用户首单保存成功后弹出客户来源调研弹窗",
+      "module_l1": "销售",
+      "module_l2": "销售",
+      "module_match": "matched",
+      "match_keyword": "销售单",
+      "confidence": "high"
+    },
+    {
+      "rp_id": "RP-002",
+      "rp_title": "弹窗曝光埋点上报一次",
+      "module_l1": "销售",
+      "module_l2": "销售",
+      "module_match": "matched",
+      "match_keyword": "销售单",
+      "confidence": "high"
+    },
+    {
+      "rp_id": "RP-003",
+      "rp_title": "用户可选择来源确认或跳过关闭弹窗",
+      "module_l1": "客户",
+      "module_l2": "客户",
+      "module_match": "matched",
+      "match_keyword": "客户来源",
+      "confidence": "high"
+    }
+  ],
+  "unmatched": [],
+  "unmatched_count": 0
+}

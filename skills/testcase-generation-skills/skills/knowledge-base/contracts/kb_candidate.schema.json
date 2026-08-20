@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/kb_candidate.schema.json",
+  "title": "KbCandidateBundle",
+  "description": "Demand 6.3 统一来源候选；text/xmind/confluence adapter 输出此形状",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source", "source_fingerprint", "items"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "6.3" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "ref"],
+      "properties": {
+        "type": { "type": "string", "enum": ["text", "xmind", "ctc", "confluence"] },
+        "ref": { "type": "string", "minLength": 1 },
+        "read_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "source_fingerprint": {
+      "type": "string",
+      "minLength": 8,
+      "description": "mtime+hash 或 pageId@version 合成指纹"
+    },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidateItem" }
+    },
+    "notes": { "type": "array", "items": { "type": "string" } },
+    "source_manifest": { "type": "object" },
+    "source_manifest_path": { "type": "string" },
+    "source_manifest_fingerprint": { "type": "string", "minLength": 8 }
+  },
+  "$defs": {
+    "platform": { "type": "string", "enum": ["web", "app"] },
+    "candidateItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "module_l1", "module_l2", "kind"],
+      "properties": {
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "module_l1": { "type": "string", "minLength": 1 },
+        "module_l2": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["page", "page_relation", "page_url", "page_element", "backend_api", "supplement", "matrix_note"]
+        },
+        "page_id": { "type": "string" },
+        "case_id": { "type": "string" },
+        "page_role": { "type": "string", "enum": ["主页面", "核心子页面", "子页面"] },
+        "platform": { "$ref": "#/$defs/platform" },
+        "element_name": { "type": "string" },
+        "statement": { "type": "string" },
+        "element": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "position": { "type": "string" },
+            "input_options": { "type": "string" },
+            "interaction": { "type": "string" },
+            "result": { "type": "string" },
+            "downstream": { "type": "string" },
+            "backend_apis": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/backendApi" }
+            }
+          }
+        },
+        "page_url": { "$ref": "#/$defs/pageUrl" },
+        "backend_api": { "$ref": "#/$defs/backendApi" },
+        "assertions": { "type": "array", "items": { "type": "object" } },
+        "assertion_count": { "type": "integer", "minimum": 0 },
+        "relation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["from", "action", "to"],
+          "properties": {
+            "from": { "type": "string" },
+            "action": { "type": "string" },
+            "to": { "type": "string" }
+          }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "module_reason": { "type": "string" }
+      }
+    },
+    "pageUrl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["template"],
+      "properties": {
+        "template": { "type": "string", "minLength": 1 },
+        "absolute": { "type": "boolean", "default": false }
+      }
+    },
+    "backendApi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "WS", "NONE", "PENDING"]
+        },
+        "path": { "type": "string", "minLength": 1 },
+        "operation": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/kb_completeness_report.schema.json",
+  "title": "KbCompletenessReport",
+  "description": "Demand 6.4 KB 写前完整性报告；warning 不阻断，blocking gap 必须阻断写入",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_type",
+    "source_hash",
+    "p0_case_ids",
+    "extracted",
+    "blocking_gaps",
+    "warning_gaps",
+    "blocked_write"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "6.4" },
+    "source_type": {
+      "type": "string",
+      "enum": ["text", "xmind", "ctc", "confluence"]
+    },
+    "source_hash": { "type": "string", "minLength": 8 },
+    "p0_case_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^TC-\\d{3,}$" }
+    },
+    "extracted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages", "relations", "elements"],
+      "properties": {
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/extractedItem" }
+        },
+        "relations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/extractedItem" }
+        },
+        "elements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/extractedItem" }
+        },
+        "supplements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/extractedItem" }
+        }
+      }
+    },
+    "blocking_gaps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/gap" }
+    },
+    "warning_gaps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/gap" }
+    },
+    "blocked_write": { "type": "boolean" },
+    "next_action": {
+      "type": "string",
+      "enum": ["human_fill_then_reoverview", "prepare_review"]
+    }
+  },
+  "$defs": {
+    "extractedItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fields_present"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["page", "page_relation", "page_element", "supplement", "page_url", "backend_api"]
+        },
+        "page_id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "from_page": { "type": "string", "minLength": 1 },
+        "action": { "type": "string", "minLength": 1 },
+        "to_page": { "type": "string", "minLength": 1 },
+        "platform": { "type": "string", "enum": ["web", "app"] },
+        "fields_present": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "field"],
+      "properties": {
+        "ref": { "type": "string", "minLength": 1 },
+        "field": { "type": "string", "minLength": 1 },
+        "platform": { "type": "string", "enum": ["web", "app"] },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "blocking_gaps": { "minItems": 1 }
+        },
+        "required": ["blocking_gaps"]
+      },
+      "then": {
+        "properties": {
+          "blocked_write": { "const": true },
+          "next_action": { "const": "human_fill_then_reoverview" }
+        }
+      },
+      "else": {
+        "properties": {
+          "blocked_write": { "const": false }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "products": {
+    "in_scope": [
+      "智慧记AI进销存"
+    ],
+    "out_of_scope": [],
+    "source": "self-test"
+  },
+  "versions": {
+    "in_scope": [
+      "开单版",
+      "单店版",
+      "多店版"
+    ],
+    "out_of_scope": [],
+    "source": "self-test"
+  },
+  "platforms": {
+    "in_scope": [
+      "PC端"
+    ],
+    "out_of_scope": [],
+    "source": "self-test"
+  }
+}

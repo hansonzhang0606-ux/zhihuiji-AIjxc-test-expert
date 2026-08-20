@@ -1,0 +1,86 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "test_essence": "验证首单保存后调研弹窗、埋点与跨端/产品回归",
+  "unmatched_count": 0,
+  "test_points": [
+    {
+      "id": "TP-001",
+      "title": "新用户首单保存成功弹出调研弹窗且无Toast",
+      "priority": "P0",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "module_match": "matched",
+      "product_tags": ["ailit"],
+      "version_tags": ["开单版", "单店版", "多店版"],
+      "platform_tags": ["PC端", "APP端"],
+      "source_rp_ids": ["RP-001"],
+      "steps_outline": [
+        "使用无历史销售单的ailit账号登录PC或APP",
+        "创建销售单并保存成功"
+      ],
+      "expected_outline": [
+        "弹出客户来源调研弹窗",
+        "不显示原保存成功Toast"
+      ],
+      "is_core_scenario": true,
+      "is_regression": false,
+      "nfr_type": null
+    },
+    {
+      "id": "TP-002",
+      "title": "弹窗曝光埋点仅上报一次",
+      "priority": "P1",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "module_match": "matched",
+      "product_tags": ["ailit"],
+      "version_tags": ["开单版", "单店版", "多店版"],
+      "platform_tags": ["PC端"],
+      "source_rp_ids": ["RP-002"],
+      "steps_outline": ["触发弹窗后查看埋点"],
+      "expected_outline": ["曝光事件上报一次"],
+      "is_core_scenario": false,
+      "is_regression": false,
+      "nfr_type": null
+    },
+    {
+      "id": "TP-003",
+      "title": "选择来源确认后弹窗关闭且单据已保存",
+      "priority": "P1",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "module_match": "matched",
+      "product_tags": ["ailit"],
+      "version_tags": ["单店版", "多店版"],
+      "platform_tags": ["APP端"],
+      "source_rp_ids": ["RP-003"],
+      "steps_outline": ["在弹窗中选择来源并确认"],
+      "expected_outline": ["弹窗关闭", "销售单状态为已保存"],
+      "is_core_scenario": true,
+      "is_regression": false,
+      "nfr_type": null
+    },
+    {
+      "id": "TP-004",
+      "title": "验证智慧记AI进销存不受本次需求影响",
+      "priority": "P3",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "module_match": "matched",
+      "product_tags": ["智慧记AI进销存"],
+      "version_tags": ["单店版"],
+      "platform_tags": ["PC端"],
+      "source_rp_ids": ["RP-001"],
+      "steps_outline": ["智慧记AI进销存账号首单保存"],
+      "expected_outline": ["行为与改动前一致，无新增ailit弹窗逻辑副作用"],
+      "is_core_scenario": false,
+      "is_regression": true,
+      "nfr_type": null
+    }
+  ],
+  "merge_report": {
+    "rules_applied": ["core_no_merge"],
+    "entries": []
+  },
+  "schema_version": "6.0"
+}

@@ -1,0 +1,39 @@
+{
+  "requirement_title": "客户来源调研弹窗",
+  "test_essence": "验证技术引用可附着在测试点",
+  "unmatched_count": 0,
+  "schema_version": "6.0",
+  "test_points": [
+    {
+      "id": "TP-001",
+      "title": "打开销售单列表页",
+      "priority": "P0",
+      "module_l1": "销售",
+      "module_l2": "销售单",
+      "module_match": "matched",
+      "product_tags": ["ailit"],
+      "version_tags": ["单店版"],
+      "platform_tags": ["PC端"],
+      "source_rp_ids": ["RP-001"],
+      "technical_refs": [
+        {
+          "type": "page_url",
+          "platform": "web",
+          "page_id": "销售单列表页",
+          "target": "/sales/order/list",
+          "kb_ref": "DF-010"
+        },
+        {
+          "type": "backend_api",
+          "platform": "web",
+          "page_id": "销售单列表页",
+          "element_name": "表头.设置",
+          "method": "GET",
+          "target": "/api/v1/columns",
+          "operation": "查询可选列",
+          "kb_ref": "DF-011"
+        }
+      ]
+    }
+  ]
+}

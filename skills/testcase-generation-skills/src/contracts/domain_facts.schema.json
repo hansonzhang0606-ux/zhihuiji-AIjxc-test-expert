@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://testcase-generation.local/contracts/domain_facts.schema.json",
+  "title": "DomainFacts",
+  "description": "Demand 6.1 本需求临时知识点契约（WP-61-FACTS）。唯一运行时路径：script/stage1/domain_facts.json。仅 1A/3A 消费；Stage4 禁止读取。非工程级知识库（长期库见 Demand 6.2）。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "requirement_title", "facts"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "6.1",
+      "description": "临时知识点契约版本"
+    },
+    "requirement_title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "与工作区目录名 / session 一致的需求 title（清洗后）"
+    },
+    "facts": {
+      "type": "array",
+      "description": "本轮临时断言列表；允许空数组",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "可选：最后写入时间 ISO8601"
+    },
+    "note": {
+      "type": "string",
+      "description": "可选：人审备注"
+    }
+  },
+  "$defs": {
+    "factSource": {
+      "type": "string",
+      "enum": ["human_review", "kb_applied"],
+      "description": "human_review=人审澄清；kb_applied=6.2 截取合并写入（非独立文件）"
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "source", "session_only"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^DF-\\d{3,}$",
+          "description": "如 DF-001"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "description": "人读断言：本需求下必须为真的口径"
+        },
+        "forbid_patterns": {
+          "type": "array",
+          "description": "禁止出现在 RP/TP 标题或期望中的子串/模式；缺省视为 []",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "source": {
+          "$ref": "#/$defs/factSource"
+        },
+        "session_only": {
+          "type": "boolean",
+          "description": "true=仅本需求例外，默认不晋升 6.2 长期库"
+        },
+        "related_modules": {
+          "type": "array",
+          "description": "可选：关联二级模块名（须能对应 module_mapping；不作强校验于本契约）",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "kb_ref": {
+          "type": "string",
+          "description": "可选：来自 6.2 时的规则行/元素行引用 id，便于追溯"
+        },
+        "platforms": {
+          "type": "array",
+          "description": "仅 source=kb_applied 必填：知识事实适用端，使用 web/app 规范枚举",
+          "items": {
+            "type": "string",
+            "enum": ["web", "app"]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "fact_kind": {
+          "type": "string",
+          "description": "仅 source=kb_applied 必填：知识切片类型",
+          "enum": [
+            "matrix_note",
+            "page_relation",
+            "page_url",
+            "page_element",
+            "backend_api",
+            "supplement"
+          ]
+        },
+        "page_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "页面关系或元素事实关联的统一页面名称"
+        },
+        "element_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "page_element / backend_api 所属核心元素"
+        },
+        "relation": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "仅 page_relation 可用：页面跳转路径",
+          "required": ["from", "to"],
+          "properties": {
+            "from": { "type": "string", "minLength": 1 },
+            "to": { "type": "string", "minLength": 1 }
+          }
+        },
+        "page_url": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "仅 page_url：Web 前端 URL 模板",
+          "required": ["template"],
+          "properties": {
+            "template": { "type": "string", "minLength": 1 },
+            "absolute": { "type": "boolean", "default": false }
+          }
+        },
+        "backend_api": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "仅 backend_api：分端后端接口",
+          "required": ["method", "path"],
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "WS"]
+            },
+            "path": { "type": "string", "minLength": 1 },
+            "operation": { "type": "string" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "source": { "const": "kb_applied" } },
+            "required": ["source"]
+          },
+          "then": {
+            "required": ["platforms", "fact_kind", "kb_ref"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "fact_kind": { "const": "page_relation" } },
+            "required": ["fact_kind"]
+          },
+          "then": {
+            "required": ["page_id", "relation"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "fact_kind": { "const": "page_url" } },
+            "required": ["fact_kind"]
+          },
+          "then": {
+            "required": ["page_id", "page_url"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "fact_kind": { "const": "backend_api" } },
+            "required": ["fact_kind"]
+          },
+          "then": {
+            "required": ["page_id", "element_name", "backend_api"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "fact_kind": { "const": "page_element" } },
+            "required": ["fact_kind"]
+          },
+          "then": {
+            "required": ["page_id"]
+          }
+        }
+      ]
+    }
+  }
+}
