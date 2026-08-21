@@ -1,6 +1,6 @@
 ---
 name: zhihuiji-aijxc-test-expert
-description: "智慧记AI进销存（又称智慧记星火，AIJXC）业务线功能测试专家。内置 testcase-generation-skills v7.2.0 用例生成套件：需求下载与三维识别、需求点提取、测试点合成、用例生成、P0 Excel 导出 DevOps，三处人审强制停等；嵌入时间追踪能力——每环节结束（01 文档整理/02 需求评审/04 生成测试点/06 用例细化/07 知识入库）强制收集时间节省数据，先写本地 JSONL，再由定时任务幂等同步共享 MySQL agent_time_tracking；身份识别实时查询 agent_team_roster 表（盲输入姓名）；用户故事以 PRJ 编号+名称追踪；与测试人员在 VSCode/OpenCode 中使用的同版套件数据同源同库。"
+description: "智慧记AI进销存（又称智慧记星火，AIJXC）业务线功能测试专家。内置 testcase-generation-skills v7.2.0 用例生成套件：需求下载与三维识别、需求点提取、测试点合成、用例生成、P0 Excel 导出 DevOps，三处人审强制停等；嵌入时间追踪能力——每环节结束（01 文档整理/02 需求评审/04 生成测试点/06 用例细化/07 知识入库）强制收集时间节省数据，先写本地 JSONL，再由定时任务幂等同步共享 MySQL agent_time_tracking；身份识别实时查询 agent_team_roster 表（盲输入姓名）；用户故事以 PRJ 编号+名称追踪；与测试人员在 VSCode/OpenCode 中使用的同版套件数据同源同库。 v1.0.1：时间追踪配置闭环——业务线固定 AI进销存 后强制校验 time-tracking/AI进销存/mysql_config.json 真实生成才算流程闭环，修复「任一份有效即可」导致配置被跳过、数据无法入库的隐患；sync_task.bat 升级为接收第 1 个参数 %1 决定业务线（配套内嵌 time-tracking v5.4→v5.5）。"
 displayName:
   en: ZhihuiJi AI-JXC Testing Expert
   zh: 智慧记AI进销存专家
@@ -44,7 +44,7 @@ Stage0 初始化 → Stage1 下载+三维识别 → ⛔人审① → Stage1A 需
 
 1. **识别预填开场白**：如果用户第一条消息是 `defaultInitPrompt` 预填文本（特征：包含"我是【智慧记AI进销存专家】"和"请告诉我您的姓名"），不要重复自我介绍，直接回复："欢迎！请直接输入你的姓名进行身份验证。"
 2. **MySQL 本地配置检查（必须先做，否则花名册查不到）**：
-   - 扫描 `~/.workbuddy/data/time-tracking/*/mysql_config.json`（`agent_team_roster` 与 `agent_time_tracking` 共用同一库，任一份有效即可；本专家优先使用 `AI进销存` 目录下的配置）。
+   - **必须确认 `time-tracking/AI进销存/mysql_config.json` 真实存在**（`agent_team_roster` 与 `agent_time_tracking` 共用同一库，但本专家固定业务线 `AI进销存`，须以本业务线配置为准）；缺失则立即调用 `init_mysql_config.py --biz-line "AI进销存"` 生成并**校验文件落地**后才进入第 3 步，修复此前「任一份有效即可」导致 `AI进销存` 配置被跳过、数据无法入库的隐患（v1.0.1 强化）。
    - **已存在** → 直接进入第 3 步。
    - **不存在（首次使用）** → 自动生成全空配置模板（**禁止在对话中索要密码**）：
      ```bash

@@ -1,4 +1,4 @@
-# 时间节省追踪规则（v7.2 嵌入版 — 随「测试用例自动生成 Skill 套件」分发 | 智慧记 AI 进销存团队 | time-tracking v5.4 立即触发+阻塞）
+# 时间节省追踪规则（v7.2 嵌入版 — 随「测试用例自动生成 Skill 套件」分发 | 智慧记 AI 进销存团队 | time-tracking v5.5 立即触发+阻塞）
 
 > **⛔ v5.4 核心强化（强制 + 立即 + 阻塞，不可绕过）**：
 > 5 个追踪环节（01/02/04/06/07）**每一步产出物交付给用户后**，**必须**按以下固定顺序执行，**顺序不可调换、不可跳过、不可合并**：
@@ -26,6 +26,7 @@
 > **v5.3 变更**：① `sync_task.bat` 修复 Windows 兼容性（GBK 编码 + CRLF 换行 + Python 自动探测 + `%~dp0` 定位），解决 schtasks 触发的 cmd.exe 用 GBK(936) 读取 UTF-8/LF bat 导致中文乱码、找不到命令、路径找不到的问题；② 定时任务注册由「人工手动」升级为「AI 自动完成」——会话启动检测到未注册 → 自动 `schtasks /create` 注册早/午/晚三个每日任务（09:00 / 12:00 / 18:00）。
 >
 > **v5.4 变更**：强化「立即触发 + 阻塞下一步」——修复实际测试中步骤完成后 AI 跳过时间收集、直接展示「下一步」选项的问题。5 个环节产出交付后**必须先完成时间收集**（通报 → 询问 → 解析 → 二次确认 → 写本地 JSONL），**确认记录完成后**才允许展示下一步选项（见本文件头部 ⛔ 段与第四节）。
+> **v5.5 变更（多业务线共享 bat，2026-08-21）**：`sync_task.bat` 由「顶部预置 `set BIZ_LINE=AI进销存`」升级为「接收第 1 个参数 %1 决定业务线」，定时任务注册命令 `/tr` 末尾传入对应业务线（本专家固定传 `AI进销存`），同一份 bat 可复用服务多业务线（效贷/泾渭云/效融/小贷/智慧记+运营系统/AI进销存/智慧记零售），彻底去掉硬编码。配套 智慧记专家包 v1.0.1 在业务线确定后强制校验 `time-tracking/AI进销存/mysql_config.json` 真实生成才算流程闭环，修复「任一份有效即可」导致 AI进销存 配置被跳过、数据无法入库的隐患。v5.4 的「立即+阻塞」措辞保持不变。
 >
 > **双宿主**：WorkBuddy 智能体与 IDE（VSCode / OpenCode / Claude Code 等）使用同一套纯命令行脚本，
 > 数据落同一 MySQL 表；仅报告展示方式不同（WorkBuddy 用 `present_files`，IDE 给文件路径，见第五节）。
@@ -115,15 +116,15 @@ MySQL 配置就绪后，AI **自动检查并注册**本机「定时同步」计�
 2. **不存在** → AI 自动注册早/午/晚三个每日任务（`<scripts目录>` 换成实际绝对路径，如 `...\testcase-generation-skills\src\scripts\time-tracking\scripts`）：
 
    ```bat
-   schtasks /create /tn "AI进销存时间同步-早" /tr "<scripts目录>\sync_task.bat" /sc daily /st 09:00 /f
-   schtasks /create /tn "AI进销存时间同步-午" /tr "<scripts目录>\sync_task.bat" /sc daily /st 12:00 /f
-   schtasks /create /tn "AI进销存时间同步-晚" /tr "<scripts目录>\sync_task.bat" /sc daily /st 18:00 /f
+   schtasks /create /tn "AI进销存时间同步-早" /tr "<scripts目录>\sync_task.bat AI进销存" /sc daily /st 09:00 /f
+   schtasks /create /tn "AI进销存时间同步-午" /tr "<scripts目录>\sync_task.bat AI进销存" /sc daily /st 12:00 /f
+   schtasks /create /tn "AI进销存时间同步-晚" /tr "<scripts目录>\sync_task.bat AI进销存" /sc daily /st 18:00 /f
    ```
 
 3. **已存在** → 跳过，直接进入用户故事收集。
 4. **注册失败**（权限不足 / schtasks 被禁用）→ 提示测试人员以管理员身份运行注册命令（见 §六手动备选），不阻塞其余流程。
 
-> `sync_task.bat` 已内置 Python 自动探测 + GBK/CRLF 编码修复，且顶部已预置 `set BIZ_LINE=AI进销存`，测试人员无需改任何配置。
+> `sync_task.bat` 已内置 Python 自动探测 + GBK/CRLF 编码修复，且接收第 1 个参数 %1 决定业务线（缺省默认 AI进销存），测试人员无需改任何配置。
 
 ### 4. 用户故事收集（Fast Path 触发时）
 
@@ -341,12 +342,12 @@ CSV 导出：`python src/scripts/time-tracking/scripts/generate_time_analytics.p
 以管理员身份打开 CMD（把 `<scripts目录>` 换成实际部署路径，如 `C:\...\testcase-generation-skills\src\scripts\time-tracking\scripts`）：
 
 ```bat
-schtasks /create /tn "AI进销存时间同步-早" /tr "<scripts目录>\sync_task.bat" /sc daily /st 09:00 /f
-schtasks /create /tn "AI进销存时间同步-午" /tr "<scripts目录>\sync_task.bat" /sc daily /st 12:00 /f
-schtasks /create /tn "AI进销存时间同步-晚" /tr "<scripts目录>\sync_task.bat" /sc daily /st 18:00 /f
+schtasks /create /tn "AI进销存时间同步-早" /tr "<scripts目录>\sync_task.bat AI进销存" /sc daily /st 09:00 /f
+schtasks /create /tn "AI进销存时间同步-午" /tr "<scripts目录>\sync_task.bat AI进销存" /sc daily /st 12:00 /f
+schtasks /create /tn "AI进销存时间同步-晚" /tr "<scripts目录>\sync_task.bat AI进销存" /sc daily /st 18:00 /f
 ```
 
-> `sync_task.bat` 顶部已预置 `set BIZ_LINE=AI进销存`，并内置 Python 自动探测 + GBK/CRLF 编码修复。
+> `sync_task.bat` 接收第 1 个参数 %1 决定业务线（缺省默认 AI进销存），并内置 Python 自动探测 + GBK/CRLF 编码修复。
 > 查看：`schtasks /query /tn "AI进销存时间同步-午"`；删除：`schtasks /delete /tn "..." /f`。
 
 ### 手动同步 / 验证（可选）

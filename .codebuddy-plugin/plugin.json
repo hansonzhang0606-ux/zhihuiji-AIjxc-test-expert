@@ -1,13 +1,17 @@
 {
   "name": "zhihuiji-aijxc-test-expert",
-  "version": "1.0.0",
-  "description": "AI testing expert for the ZhihuiJi AI-JXC (AIJXC, a.k.a. ZhihuiJi XingHuo) business line, powered by testcase-generation-skills v7.2.0. Covers the Fast Path pipeline: requirement download + context recognition (human review 1), requirement-point extraction (human review 1'), test-point synthesis (human review 2), test case generation, and optional P0 Excel export to DevOps. Embeds the time-tracking skill (34 files) for mandatory per-stage time-saving collection (steps 01/02/04/06/07) with local JSONL first, then idempotent scheduled sync (09:00/12:00/18:00) to shared MySQL agent_time_tracking; identity verification queries MySQL agent_team_roster in real time; user story tracked by PRJ number + name.",
+  "version": "1.0.1",
+  "description": "AI testing expert for the ZhihuiJi AI-JXC (AIJXC, a.k.a. ZhihuiJi XingHuo) business line, powered by testcase-generation-skills v7.2.0. Covers the Fast Path pipeline: requirement download + context recognition (human review 1), requirement-point extraction (human review 1'), test-point synthesis (human review 2), test case generation, and optional P0 Excel export to DevOps. Embeds the time-tracking skill (34 files) for mandatory per-stage time-saving collection (steps 01/02/04/06/07) with local JSONL first, then idempotent scheduled sync (09:00/12:00/18:00) to shared MySQL agent_time_tracking; identity verification queries MySQL agent_team_roster in real time; user story tracked by PRJ number + name.. v1.0.1: 时间追踪配置闭环（强制校验 AI进销存/mysql_config.json 真实生成）+ sync_task.bat 升级为接收第1个参数%1决定业务线（配套内嵌 time-tracking v5.4→v5.5）。",
   "author": {
     "name": "Quality Management Team",
     "email": "qa@kingdee.com"
   },
-  "agents": ["./agents/zhihuiji-aijxc-test-expert.md"],
-  "skills": ["./skills/testcase-generation-skills"],
+  "agents": [
+    "./agents/zhihuiji-aijxc-test-expert.md"
+  ],
+  "skills": [
+    "./skills/testcase-generation-skills"
+  ],
   "expertType": "agent",
   "agentName": "zhihuiji-aijxc-test-expert",
   "displayName": {
@@ -20,7 +24,7 @@
   },
   "displayDescription": {
     "en": "[v1.0.0] ZhihuiJi AI-JXC testing expert with end-to-end pipeline: requirement download and context recognition, requirement-point extraction, test-point synthesis, test case generation, and P0 Excel export to DevOps. Embeds time-tracking skill: mandatory per-stage time-saving collection (steps 01/02/04/06/07) with double confirmation, local JSONL first, scheduled idempotent sync to shared MySQL, and per-person/business-line HTML analytics reports. Identity verification queries MySQL agent_team_roster in real time (blind name input, no roster exposure). User story tracked by PRJ number + name for agent_time_tracking. Works together with the same v7.2.0 suite used in VSCode/OpenCode IDEs - both hosts write to the same MySQL table.",
-    "zh": "智慧记AI进销存功能测试专家，需求到用例生成全流程，强制追踪每环节时间节省，数据同步MySQL共享库。"
+    "zh": "【v1.0.1】智慧记AI进销存功能测试专家，需求到用例生成全流程，强制追踪每环节时间节省，数据同步MySQL共享库。"
   },
   "avatar": "avatars/expert.png",
   "categoryId": "10-ProjectQuality",
@@ -29,9 +33,18 @@
     "en": "I am the ZhihuiJi AI-JXC Testing Expert, serving the ZhihuiJi AI-JXC (ZhihuiJi XingHuo, AIJXC) business line. I support requirement download and consolidation, requirement-point extraction, test-point synthesis, test case generation, and platform import. Please tell me your name for identity verification."
   },
   "tags": [
-    { "en": "Functional Testing", "zh": "功能测试" },
-    { "en": "Test Case Generation", "zh": "测试用例生成" },
-    { "en": "Time Tracking", "zh": "时间节省追踪" }
+    {
+      "en": "Functional Testing",
+      "zh": "功能测试"
+    },
+    {
+      "en": "Test Case Generation",
+      "zh": "测试用例生成"
+    },
+    {
+      "en": "Time Tracking",
+      "zh": "时间节省追踪"
+    }
   ],
   "quickPrompts": [
     {
