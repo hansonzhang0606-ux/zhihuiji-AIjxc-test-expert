@@ -1,7 +1,15 @@
-﻿# 智慧记AI进销存测试专家 - 安装后注册脚本
-# 用途：将已安装的 zhihuiji-aijxc-test-expert 套件注册为 WorkBuddy 专家
-# 使用方法：双击 register_expert.bat，或右键本文件 →"使用 PowerShell 运行"
-# 前提：已通过团队市场安装 zhihuiji-aijxc-test-expert 套件
+# 智慧记AI进销存测试专家 - 安装后注册脚本（健壮版 v2）
+# 用途：将 zhihuiji-aijxc-test-expert 套件注册为 WorkBuddy 专家
+# 使用方法：双击 register_expert.bat，或右键本文件 ->"使用 PowerShell 运行"
+# 改进点（相对 v1）：
+#   - 第4步源目录搜索改为「按 plugin.json 的 name 字段递归匹配」，兼容以下任意布局：
+#       * 团队市场：<market>\plugins\zhihuiji-aijxc-test-expert\
+#       * GitHub 缓存：<market>\zhihuiji-aijxc-test-expert\  （包在仓库根）
+#       * GitHub 缓存：<market>\plugins\zhihuiji-aijxc-test-expert\
+#       * 脚本自身所在仓库：<repo根>\  （用户直接克隆/解压在本地）
+#   - 未找到时支持手动输入路径兜底
+#   - 第3步套件检查改为仅警告、不阻断（避免误选 n 直接退出）
+#   - 已处于 my-experts 目标目录时不重复复制
 
 $ErrorActionPreference = "Stop"
 
@@ -65,59 +73,77 @@ if (-not $userId) {
 }
 Write-Host "[2/5] 用户 ID: $userId" -ForegroundColor Green
 
-# 3. 检查套件是否已安装
+# 3. 检查套件是否已安装（仅警告，不阻断）
 $settingsPath = Join-Path $wbHome "settings.json"
 $pluginInstalled = $false
 if (Test-Path $settingsPath) {
     try {
         $settings = Get-Content $settingsPath -Encoding UTF8 -Raw | ConvertFrom-Json
         if ($settings.enabledPlugins) {
-            $pluginKey = "zhihuiji-aijxc-test-expert@zhihuiji-AIjxc-test-expert-marketplace"
-            $prop = $settings.enabledPlugins.PSObject.Properties[$pluginKey]
-            if ($prop -and $prop.Value -eq $true) {
-                $pluginInstalled = $true
+            foreach ($prop in $settings.enabledPlugins.PSObject.Properties) {
+                if ($prop.Name -like "*zhihuiji-aijxc-test-expert*") {
+                    $pluginInstalled = $true
+                    break
+                }
             }
         }
     } catch {}
 }
 
 if ($pluginInstalled) {
-    Write-Host "[3/5] 套件已安装" -ForegroundColor Green
+    Write-Host "[3/5] 套件已安装（enabledPlugins 命中）" -ForegroundColor Green
 } else {
-    Write-Host "[!] 未检测到已安装的 zhihuiji-aijxc-test-expert 套件。" -ForegroundColor Yellow
-    Write-Host "    请先在 WorkBuddy 中安装套件后再运行本脚本。" -ForegroundColor Yellow
-    $continue = Read-Host "是否仍然继续注册？(y/n)"
-    if ($continue -ne "y" -and $continue -ne "Y") {
-        Read-Host "按回车键退出"
-        exit 0
-    }
-    Write-Host "[3/5] 跳过套件检查" -ForegroundColor Green
+    Write-Host "[3/5] 未检测到套件安装记录（不影响注册，继续）" -ForegroundColor Yellow
 }
 
-# 4. 复制专家包到 my-experts 市场
-# WorkBuddy 的 scanCustomExperts 只扫描 my-experts 市场目录
-# 必须将专家包从安装市场复制到 my-experts 才能被识别为专家
+# 4. 定位专家包源目录（健壮搜索）
 $expertId = "zhihuiji-aijxc-test-expert"
 $marketplacesDir = Join-Path $wbHome "plugins\marketplaces"
-
-# 查找专家包源目录（在任意市场中搜索）
 $sourceDir = $null
-$marketplaceDirs = Get-ChildItem $marketplacesDir -Directory -ErrorAction SilentlyContinue
-foreach ($mpDir in $marketplaceDirs) {
-    $candidate = Join-Path $mpDir.FullName "plugins\$expertId"
-    if (Test-Path (Join-Path $candidate ".codebuddy-plugin\plugin.json")) {
-        $sourceDir = $candidate
-        break
+
+# 4a. 脚本自身所在仓库（scripts/.. 即包根目录）
+$scriptPkgRoot = Split-Path $PSScriptRoot -Parent
+if (Test-Path (Join-Path $scriptPkgRoot ".codebuddy-plugin\plugin.json")) {
+    $sourceDir = $scriptPkgRoot
+    Write-Host "      [匹配] 脚本所在仓库根目录" -ForegroundColor DarkGray
+}
+
+# 4b. 在 marketplaces 下递归搜索 plugin.json，按 name/id 字段匹配
+if (-not $sourceDir) {
+    $allPJs = Get-ChildItem $marketplacesDir -Recurse -Filter "plugin.json" -Force -ErrorAction SilentlyContinue
+    foreach ($pj in $allPJs) {
+        try {
+            $pjObj = Get-Content $pj.FullName -Encoding UTF8 -Raw | ConvertFrom-Json
+            if ($pjObj.name -eq $expertId -or $pjObj.id -eq $expertId) {
+                $sourceDir = Split-Path (Split-Path $pj.FullName -Parent) -Parent
+                break
+            }
+        } catch {}
+    }
+    if ($sourceDir) {
+        Write-Host "      [匹配] marketplaces 递归搜索" -ForegroundColor DarkGray
+    }
+}
+
+# 4c. 手动输入兜底
+if (-not $sourceDir) {
+    Write-Host "[!] 未能自动定位专家包。" -ForegroundColor Yellow
+    $manual = Read-Host "请手动输入专家包目录（含 .codebuddy-plugin\plugin.json 的文件夹）路径"
+    if ($manual -and (Test-Path (Join-Path $manual ".codebuddy-plugin\plugin.json"))) {
+        $sourceDir = $manual
+        Write-Host "      [匹配] 手动指定路径" -ForegroundColor DarkGray
     }
 }
 
 if (-not $sourceDir) {
-    Write-Host "[X] 未找到 $expertId 专家包。" -ForegroundColor Red
-    Write-Host "    请确认已通过团队市场安装套件。" -ForegroundColor Yellow
+    Write-Host "[X] 仍未找到 $expertId 专家包，注册中止。" -ForegroundColor Red
+    Write-Host "    请确认已安装/加载套件，或手动指定正确路径。" -ForegroundColor Yellow
     Read-Host "按回车键退出"
     exit 1
 }
+Write-Host "[4/5] 找到专家包源: $sourceDir" -ForegroundColor Green
 
+# 部署到 my-experts 市场
 $myExpertsDir = Join-Path $marketplacesDir "my-experts"
 $destDir = Join-Path $myExpertsDir "plugins\$expertId"
 $destManifestDir = Join-Path $myExpertsDir ".codebuddy-plugin"
@@ -125,7 +151,7 @@ $destManifestPath = Join-Path $destManifestDir "marketplace.json"
 
 # 检查目标是否已存在且完整
 $needCopy = $true
-if (Test-Path (Join-Path $destDir ".codebuddy-plugin\plugin.json")) {
+if (($sourceDir -eq $destDir) -or (Test-Path (Join-Path $destDir ".codebuddy-plugin\plugin.json"))) {
     Write-Host "[4/5] my-experts 市场中已存在专家包" -ForegroundColor Green
     $needCopy = $false
 }
@@ -133,17 +159,14 @@ if (Test-Path (Join-Path $destDir ".codebuddy-plugin\plugin.json")) {
 if ($needCopy) {
     Write-Host "[4/5] 正在复制专家包到 my-experts 市场..." -ForegroundColor White
 
-    # 创建目标目录
     if (-not (Test-Path $destDir)) {
         New-Item -ItemType Directory -Path $destDir -Force | Out-Null
     }
 
-    # 复制专家包（排除 .workbuddy/ 和 __pycache__/）
     $excludeDirs = @(".workbuddy", "__pycache__")
     $sourceItems = Get-ChildItem $sourceDir -Recurse -Force
     foreach ($item in $sourceItems) {
         $relativePath = $item.FullName.Substring($sourceDir.Length + 1)
-        # 跳过排除目录
         $skip = $false
         foreach ($ex in $excludeDirs) {
             if ($relativePath -like "*\$ex\*" -or $relativePath -like "$ex\*") {
@@ -188,7 +211,6 @@ if ($needManifest) {
         New-Item -ItemType Directory -Path $destManifestDir -Force | Out-Null
     }
 
-    # 读取 plugin.json 获取描述
     $pluginJsonPath = Join-Path $destDir ".codebuddy-plugin\plugin.json"
     $pluginDesc = "ZhihuiJi AI-JXC Testing Expert"
     if (Test-Path $pluginJsonPath) {
@@ -198,7 +220,6 @@ if ($needManifest) {
         } catch {}
     }
 
-    # 构建 marketplace.json
     $pluginEntry = @{
         name = $expertId
         source = "./plugins/$expertId"
@@ -240,7 +261,6 @@ if ($needCopy -or $needManifest) {
 $customDir = Join-Path $wbHome "experts\custom\$userId"
 $expertsJsonPath = Join-Path $customDir "experts.json"
 
-# 检查是否已注册
 $alreadyRegistered = $false
 if (Test-Path $expertsJsonPath) {
     try {
@@ -257,12 +277,10 @@ if (Test-Path $expertsJsonPath) {
 if ($alreadyRegistered) {
     Write-Host "[5/5] 专家已注册，无需重复操作。" -ForegroundColor Green
 } else {
-    # 创建目录
     if (-not (Test-Path $customDir)) {
         New-Item -ItemType Directory -Path $customDir -Force | Out-Null
     }
 
-    # 构建专家列表
     $expertList = @($expertId)
     if (Test-Path $expertsJsonPath) {
         try {
@@ -276,7 +294,6 @@ if ($alreadyRegistered) {
         } catch {}
     }
 
-    # 写入 JSON（UTF-8 无 BOM）
     if ($expertList.Count -eq 1) {
         $jsonContent = "[`n  `"$expertId`"`n]"
     } else {
