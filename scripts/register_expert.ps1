@@ -1,4 +1,4 @@
-# 智慧记AI进销存测试专家 - 安装后注册脚本（健壮版 v2）
+﻿# 智慧记AI进销存测试专家 - 安装后注册脚本（健壮版 v2.1）
 # 用途：将 zhihuiji-aijxc-test-expert 套件注册为 WorkBuddy 专家
 # 使用方法：双击 register_expert.bat，或右键本文件 ->"使用 PowerShell 运行"
 # 改进点（相对 v1）：
